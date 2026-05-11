@@ -24,4 +24,24 @@ addEventListener("submit", async (e) => {
   const nachname = document.getElementById
   ("nachname").value.trim();
 
+try {
+  const response = await fetch("api/profilUpdate.php",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+        "application/json",
+        },
+        body: JSON.stringify
+        ({vorname, nachname}),
+        });
+        const result = await  response.json();
+        console.log("Update response:", result);
+
+  } catch (error) {
+        console.error ("Failed to update profile:", error);
+        
+}
+
 })
+
