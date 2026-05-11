@@ -1,36 +1,27 @@
-// profil.js
-
-const myID = checkAuth();
-
-console.log(myID);
-document
-  .getElementById("profilForm")
-  .addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const vorname = document.getElementById("vorname").value.trim();
-    const nachname = document.getElementById("nachname").value.trim();
-
-
-
+async function loadProfile() {
+  
     try {
       const response = await fetch("api/profil.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ vorname, nachname }),
-      });
+        credentials: "include",
+        })
+
       const result = await response.json();
 
-      if (result.status === "success") {
-        alert("Registration successful! You can now log in.");
-        window.location.href = "login.html";
-      } else {
-        alert(result.message || "Registration failed.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong!");
-    }
-  });
+      console.log("Profile data", result);
+      } catch (error) {
+        console.error ("Failed to load profile:", error);
+        
+}
+}
+
+loadProfile();
+document.getElementById("profilForm").
+addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const vorname = document.getElementById
+  ("vorname").value.trim();
+  const nachname = document.getElementById
+  ("nachname").value.trim();
+
+})

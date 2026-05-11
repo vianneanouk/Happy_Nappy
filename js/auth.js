@@ -1,29 +1,25 @@
-// profil.js
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const vorname = document.getElementById("vorname").value.trim();
-  const name = document.getElementById("name").value.trim();
-
+async function checkAuth() {
   try {
-    const response = await fetch("api/login.php", {
-      method: "POST",
-      // credentials: 'include', // uncomment if front-end & back-end are on different domains
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, vorname, name }),
+    const response = await fetch("/api/protected.php", {
+      credentials: "include",
     });
+
+    if (response.status === 401) {
+      window.location.href = "/login.html";
+      return false;
+    }
+
     const result = await response.json();
 
-    if (result.status === "success") {
-      alert("Login successful!");
-      window.location.href = "protected.html";
-    } else {
-      alert(result.message || "Login failed.");
-    }
+    // Display user data in the protected content div
+
+    return true;
   } catch (error) {
-    console.error("Error:", error);
-    alert("Something went wrong!");
+    console.error("Auth check failed:", error);
+    window.location.href = "/login.html";
+    return false;
   }
-});
+}
+
+// Check auth when page loads
+window.addEventListener("load", checkAuth);
