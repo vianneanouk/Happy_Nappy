@@ -1,0 +1,142 @@
+/* =========================
+   START PAGE
+========================= */
+
+body {
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100%;
+
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  background: linear-gradient(
+    135deg,
+    #c7cfde 0%,
+    #f1dfe3 55%,
+    #ece5db 100%
+  );
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.start-page {
+  width: 100%;
+  max-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.start-content {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+  width: 220px;
+  height: auto;
+
+  margin-bottom: 40px;
+
+  display: block;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.start-text {
+  max-width: 320px;
+
+  margin-bottom: 80px;
+
+  font-size: 18px;
+  line-height: 1.7;
+
+  text-align: center;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.start-buttons {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  align-items: center;
+}
+
+.primary-button,
+.secondary-button {
+  width: 100%;
+  max-width: 360px;
+  height: 72px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 22px;
+
+  text-decoration: none;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+
+.primary-button {
+  background: linear-gradient(
+    90deg,
+    #9F83CF 0%,
+    #B7BEDC 100%
+  );
+
+  color: white;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.8);
+
+  color: var(--primary);
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,176 @@
+/* =========================
+   LOGIN PAGE
+========================= */
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0 !important;
+  max-width: none !important;
+
+  width: 100vw;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+
+  background: linear-gradient(
+    135deg,
+    #c7cfde 0%,
+    #f1dfe3 55%,
+    #ece5db 100%
+  );
+}
+
+
+/* =========================
+   LOGIN CONTAINER
+========================= */
+
+.login-page {
+  width: 100%;
+  max-width: 420px;
+}
+
+
+/* =========================
+   LOGIN TEXT
+========================= */
+
+h1 {
+  margin-bottom: 15px;
+}
+
+.login-subtitle {
+  margin-top: 0;
+  margin-bottom: 50px;
+
+  font-size: 16px;
+  color: var(--text-light);
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form > div {
+  margin-bottom: 28px;
+}
+
+
+/* =========================
+   LABELS
+========================= */
+
+label {
+  width: auto;
+  display: block;
+
+  margin-bottom: 12px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  color: var(--text-dark);
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  height: 72px;
+
+  padding: 0 24px;
+
+  border: none;
+  border-radius: 22px;
+
+  background-color: rgba(255, 255, 255, 0.7);
+
+  font-family: var(--font-main);
+  font-size: 18px;
+
+  box-shadow: none;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+button {
+  width: 100%;
+  height: 70px;
+
+  margin-top: 30px;
+
+  border: none;
+  border-radius: 22px;
+
+  background: linear-gradient(
+    90deg,
+    #9F83CF 0%,
+    #B7BEDC 100%
+  );
+
+  color: white;
+
+  font-family: var(--font-main);
+  font-size: 22px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   REGISTER TEXT
+========================= */
+
+.register-text {
+  margin-top: 25px;
+
+  text-align: center;
+}
+
+.register-text a {
+  color: var(--primary);
+
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+
+.error-message {
+  display: none;
+
+  margin-top: -10px;
+  margin-bottom: 10px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  color: #c45a5a;
+}
