@@ -1,28 +1,58 @@
 <?php
 session_start();
-
+header('Content-Type: application/json');
 require_once "../system/config.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $data = json_decode(file_get_contents("php://input"), true);
+    $userID = $_SESSION['user_id'] ?? null;
 
-    $vorname    = trim($data['vorname'] ?? '');
-    $nachname = trim($data['nachname'] ?? '');
-
-if (!$vorname || !$nachname) {
-    echo json_encode(["status" => "error", "message" =>"Vorname and Nachname are required"]);
-    exit;
+    if (!$userID) {
+        echo json_encode(["status" => "error", "message" => "Nicht eingeloggt"]);
+        exit;
     }
 
-    echo json_encode(["status" => "success"]);
+    // Daten bereinigen
+    $vorname = trim($data['vorname'] ?? '');
+    $nachname = trim($data['nachname'] ?? '');
+    $babyVorname = trim($data['babyVorname'] ?? '');
+    $babyNachname = trim($data['babyNachname'] ?? '');
+    $babyGeburtsdatum = $data['babyGeburtsdatum'] ?? null;
+    $babyGewicht = $data['babyGewicht'] ?? null;
 
-    $userID = $_SESSION['user_id'];
+    if (!$vorname || !$nachname) {
+        echo json_encode(["status" => "error", "message" => "Vorname und Nachname sind erforderlich"]);
+        exit;
+    }
 
-    $stmt = $pdo->prepare("UPDATE users SET vorname = :vorname, nachname = :nachname WHERE id = :userID");
-    $stmt->execute([ ":vorname" => $vorname, ":nachname" => $nachname, ":userID" => $userID]);
-    $userUpdate = $stmt->fetch();
+    try {
+        $sql = "UPDATE users SET 
+                vorname = :vorname, 
+                nachname = :nachname, 
+                babyVorname = :babyVorname, 
+                babyNachname = :babyNachname, 
+                babyGeburtsdatum = :babyGeburtsdatum, 
+                gewicht = :gewicht,
+                windelgroesse = :windelgroesse
+                WHERE id = :userID";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ":vorname"  => $vorname,
+            ":nachname" => $nachname,
+            ":babyVorname" => $babyVorname,
+            ":babyNachname" => $babyNachname,
+            ":babyGeburtsdatum"   => $babyGeburtsdatum,
+            ":gewicht" => $babyGewicht,
+            ":windelgroesse" => :windelgroesse
+            ":userID"   => $userID
+        ]);
+
+        echo json_encode(["status" => "success", "message" => "Daten gespeichert"]);
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => "Datenbankfehler: " . $e->getMessage()]);
+    }
 
 } else {
-    echo json_encode(["status" => "error", "message" => "Falsch"]);
+    echo json_encode(["status" => "error", "message" => "Ungültige Anfrage"]);
 }

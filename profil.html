@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Profil</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/profil.css" />
   </head>
   <body>
     <h1>Profil</h1>
@@ -17,7 +18,94 @@
         <label>Nachname</label>
         <input type="text" id="nachname" required />
       </div>
+
+      <div>
+        <label>Email</label>
+        <input type="email" id="email" readonly />
+      </div>
+      
+
+      <div>
+        <label>Beigetreten am</label>
+        <input type="text" id="beitrittsdatum" readonly />
+      </div>
+
+        <h2>Dein Baby</h2>
+      <div>
+        <label>Vorname</label>
+        <input type="text" id="babyVorname" required />
+      </div>
+
+      <div>
+        <label>Nachname</label>
+        <input type="text" id="babyNachname" required />
+      </div>
+
+      <div>
+        <label>Geburtsdatum</label>
+        <input type="date" id="babyGeburtsdatum" required />
+      </div>
+
+      <div>
+        <label>Gewicht (kg)</label>
+        <input type="number" id="babyGewicht" step="0.1" required />
+      </div>
+      
+      <div>
+  <label>Empfohlene / Gewählte Windelgrösse</label>
+  <select id="windelgroesse">
+    <option value="0">Grösse 0 (&lt;3 kg)</option>
+    <option value="1">Grösse 1 (3-5 kg)</option>
+    <option value="2">Grösse 2 (5-8 kg)</option>
+    <option value="3">Grösse 3 (8-10 kg)</option>
+    <option value="4">Grösse 4 (10-13 kg)</option>
+  </select>
+  <small id="empfehlung-text">Vorschlag basierend auf Gewicht</small>
+</div>
+    
+      <div class="table-wrapper">
+    <h2>Windelgrössen</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Kilogramm</th>
+          <th>Grösse</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>&lt;3</td>
+          <td>0</td>
+        </tr>
+
+        <tr>
+          <td>3-5</td>
+          <td>1</td>
+        </tr>
+
+        <tr>
+          <td>5-8</td>
+          <td>2</td>
+        </tr>
+
+        <tr>
+          <td>8-10</td>
+          <td>3</td>
+        </tr>
+
+        <tr>
+          <td>10-13</td>
+          <td>4</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
       <button type="submit">Anpassen</button>
+
+
     </form>
 
      <script src="js/auth.js"></script>
