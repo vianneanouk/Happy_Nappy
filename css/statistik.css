@@ -1,5 +1,5 @@
 /* =========================
-   DASHBOARD PAGE
+   PAGE
 ========================= */
 
 html,
@@ -54,7 +54,7 @@ body {
 .welcome-text {
   margin-bottom: 12px;
 
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255,255,255,0.9);
 
   font-size: 18px;
 }
@@ -68,156 +68,116 @@ body {
 
 
 /* =========================
-   STOCK CARD
+   CHART CARD
 ========================= */
 
-.stock-card {
+.chart-card {
   width: calc(100% - 40px);
 
   margin: -70px auto 24px;
-  padding: 32px 28px;
+  padding: 30px 28px;
 
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255,255,255,0.92);
 
   border-radius: 34px;
 
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
-.stock-card h2 {
+.chart-card + .chart-card {
+  margin-top: 24px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
   margin-bottom: 30px;
-
-  font-size: 28px;
 }
 
-.stock-number {
-  font-size: 90px;
-  font-weight: 700;
+.chart-title img {
+  width: 16px;
+  height: 16px;
 
-  line-height: 1;
-
-  color: var(--text-dark);
+  object-fit: contain;
 }
 
-.stock-text {
-  margin-top: 10px;
-  margin-bottom: 34px;
+.chart-title h2 {
+  margin: 0;
 
   font-size: 24px;
 }
 
 
 /* =========================
-   PROGRESS BAR
+   CHART
 ========================= */
 
-.progress-bar {
-  width: 100%;
-  height: 18px;
+.chart-container {
+  position: relative;
 
-  border-radius: 30px;
-
-  background: #ececef;
-
-  overflow: hidden;
+  height: 260px;
 }
 
-.progress-fill {
-  width: 48%;
+.chart-grid {
+  position: absolute;
+  inset: 0;
+
+  border-left: 2px solid #8e8e8e;
+  border-bottom: 2px solid #8e8e8e;
+
+  opacity: 0.3;
+}
+
+.bars {
   height: 100%;
 
-  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  padding: 0 8px;
+}
+
+.bar-item {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.bar {
+  width: 24px;
+
+  border-radius: 14px 14px 4px 4px;
 
   background: linear-gradient(
-    90deg,
-    #9F83CF 0%,
-    #B7BEDC 100%
+    180deg,
+    #C59BE8 0%,
+    #A7CCE0 100%
   );
 }
 
-
-/* =========================
-   INFO CARDS
-========================= */
-
-.info-card {
-  width: calc(100% - 40px);
-
-  margin: 0 auto 24px;
-  padding: 30px 28px;
-
-  background: rgba(255, 255, 255, 0.88);
-
-  border-radius: 34px;
-
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+.bar.large {
+  width: 42px;
 }
 
-.info-card h2 {
-  margin-bottom: 16px;
+.bar-item span {
+  font-size: 14px;
 
-  font-size: 28px;
+  color: var(--text-light);
 }
 
-.info-card p {
-  font-size: 22px;
-}
-
-.delivery-card {
-  background: rgba(246, 236, 239, 0.9);
-}
-
-.second-child {
-  margin-top: 60px;
-}
-
-
-
-/* =========================
-   USER INFO
-========================= */
-
-#protectedContent {
-  width: calc(100% - 40px);
-
-  margin: 0 auto 30px;
-
-  text-align: center;
-}
-
-
-/* =========================
-   BUTTON
-========================= */
-
-button {
-  width: calc(100% - 40px);
-  height: 70px;
-
-  margin: 0 auto;
-
-  display: block;
-
-  border: none;
-  border-radius: 22px;
-
-  background: linear-gradient(
-    90deg,
-    #9F83CF 0%,
-    #B7BEDC 100%
-  );
-
-  color: white;
-
-  font-size: 22px;
-  font-weight: 600;
-
-  font-family: var(--font-main);
-
-  cursor: pointer;
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
 
 /* =========================
    BOTTOM NAVIGATION
@@ -262,13 +222,6 @@ button {
   gap: 4px;
 }
 
-.nav-icon img {
-  width: 25px;
-  height: 25px;
-
-  object-fit: contain;
-}
-
 .nav-icon {
   width: 48px;
   height: 48px;
@@ -278,8 +231,13 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  font-size: 26px;
+.nav-icon img {
+  width: 25px;
+  height: 25px;
+
+  object-fit: contain;
 }
 
 .nav-item.active {
@@ -292,6 +250,19 @@ button {
     #9F83CF 0%,
     #B7BEDC 100%
   );
+}
 
-  color: white;
+.child-spacer {
+  height: 50px;
+}
+
+.second-child-header {
+  margin-top: 0;
+
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+}
+
+.second-chart {
+  margin-top: -70px;
 }
