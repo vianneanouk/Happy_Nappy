@@ -1,0 +1,293 @@
+/* =========================
+   DASHBOARD PAGE
+========================= */
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0 !important;
+  max-width: none !important;
+
+  width: 100vw;
+  min-height: 100vh;
+
+  background-color: #f6f4f3;
+
+  font-family: var(--font-main);
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.dashboard-page {
+  width: 100%;
+  max-width: 430px;
+
+  margin: 0 auto;
+  padding-bottom: 140px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.dashboard-header {
+  padding: 60px 30px 120px;
+
+  background: linear-gradient(
+    135deg,
+    #9F83CF 0%,
+    #BCC6DD 100%
+  );
+
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+}
+
+.welcome-text {
+  margin-bottom: 12px;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 18px;
+}
+
+.dashboard-header h1 {
+  color: white;
+
+  font-size: 46px;
+  line-height: 1.1;
+}
+
+
+/* =========================
+   STOCK CARD
+========================= */
+
+.stock-card {
+  width: calc(100% - 40px);
+
+  margin: -70px auto 24px;
+  padding: 32px 28px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  border-radius: 34px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.stock-card h2 {
+  margin-bottom: 30px;
+
+  font-size: 28px;
+}
+
+.stock-number {
+  font-size: 90px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  color: var(--text-dark);
+}
+
+.stock-text {
+  margin-top: 10px;
+  margin-bottom: 34px;
+
+  font-size: 24px;
+}
+
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+.progress-bar {
+  width: 100%;
+  height: 18px;
+
+  border-radius: 30px;
+
+  background: #ececef;
+
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 48%;
+  height: 100%;
+
+  border-radius: 30px;
+
+  background: linear-gradient(
+    90deg,
+    #9F83CF 0%,
+    #B7BEDC 100%
+  );
+}
+
+
+/* =========================
+   INFO CARDS
+========================= */
+
+.info-card {
+  width: calc(100% - 40px);
+
+  margin: 0 auto 24px;
+  padding: 30px 28px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  border-radius: 34px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.info-card h2 {
+  margin-bottom: 16px;
+
+  font-size: 28px;
+}
+
+.info-card p {
+  font-size: 22px;
+}
+
+.delivery-card {
+  background: rgba(246, 236, 239, 0.9);
+}
+
+
+
+/* =========================
+   USER INFO
+========================= */
+
+#protectedContent {
+  width: calc(100% - 40px);
+
+  margin: 0 auto 30px;
+
+  text-align: center;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+button {
+  width: calc(100% - 40px);
+  height: 70px;
+
+  margin: 0 auto;
+
+  display: block;
+
+  border: none;
+  border-radius: 22px;
+
+  background: linear-gradient(
+    90deg,
+    #9F83CF 0%,
+    #B7BEDC 100%
+  );
+
+  color: white;
+
+  font-size: 22px;
+  font-weight: 600;
+
+  font-family: var(--font-main);
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: 430px;
+  height: 95px;
+
+  padding: 12px 22px;
+
+  background-color: rgba(255, 255, 255, 0.95);
+
+  border-top-left-radius: 34px;
+  border-top-right-radius: 34px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.nav-item {
+  text-decoration: none;
+
+  color: #a8adb8;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-icon img {
+  width: 25px;
+  height: 25px;
+
+  object-fit: contain;
+}
+
+.nav-icon {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 26px;
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-item.active .nav-icon {
+  background: linear-gradient(
+    135deg,
+    #9F83CF 0%,
+    #B7BEDC 100%
+  );
+
+  color: white;
+}

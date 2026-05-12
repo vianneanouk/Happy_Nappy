@@ -2,21 +2,127 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Protected Page</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/protected.css" />
   </head>
-  <body>
-    <h1>Protected Page</h1>
+<body>
 
-    <!-- This is where we'll dynamically show the protected content -->
+  <main class="dashboard-page">
+
+    <section class="dashboard-header">
+
+      <p class="welcome-text">Willkommen zurück</p>
+
+      <h1>
+        Hallo
+        <span id="userVorname"></span>
+      </h1>
+
+    </section>
+
+
+    <section class="stock-card">
+
+      <h2>Aktueller Bestand</h2>
+
+      <div class="stock-number">
+        32
+      </div>
+
+      <p class="stock-text">
+        Windeln verfügbar
+      </p>
+
+      <p class="stock-text">
+        reicht noch für 5 Tage
+      </p>
+
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+
+    </section>
+
+
+    <section class="info-card delivery-card">
+
+      <h2>Nächste Lieferung</h2>
+
+      <p>
+        100 Windeln unterwegs
+      </p>
+
+      <p>
+        Ankunft: 15.Mai
+      </p>
+
+    </section>
+
+
+    <section class="info-card">
+
+      <h2>Dein Verbrauch</h2>
+
+      <p>
+        55 Windeln diese Woche
+      </p>
+
+    </section>
+
+
     <div id="protectedContent">
-      <h2>Welcome, <span id="userEmail"></span>!</h2>
-      <p>Your user ID is: <span id="userId"></span></p>
+
+      <p>
+        <span id="userId"></span>
+      </p>
+
     </div>
 
-    <button id="logoutBtn">Logout</button>
+  </main>
 
-    <script src="js/protected.js"></script>
-    <script src="js/logout.js"></script>
-  </body>
+<nav class="bottom-nav">
+
+  <a href="protected.html" class="nav-item active">
+    <div class="nav-icon">
+      <img src="bilder/Icon1.png" alt="Home">
+    </div>
+
+    <span>Home</span>
+  </a>
+
+
+  <a href="bestellung.html" class="nav-item">
+    <div class="nav-icon">
+      <img src="bilder/Icon2.png" alt="Bestellung">
+    </div>
+
+    <span>Bestellung</span>
+  </a>
+
+
+  <a href="prognose.html" class="nav-item">
+    <div class="nav-icon">
+      <img src="bilder/Icon3.png" alt="Prognose">
+    </div>
+
+    <span>Prognose</span>
+  </a>
+
+
+  <a href="profil.html" class="nav-item">
+    <div class="nav-icon">
+      <img src="bilder/Icon4.png" alt="Profil">
+    </div>
+
+    <span>Profil</span>
+  </a>
+
+</nav>
+
+  <script src="js/protected.js"></script>
+  <script src="js/logout.js"></script>
+
+</body>
 </html>
