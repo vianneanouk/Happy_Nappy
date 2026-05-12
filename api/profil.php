@@ -17,4 +17,9 @@ echo json_encode ([
     "email" => $user['email'],
     "vorname" => $user['vorname'],
     "nachname" => $user['nachname'],
+    "beitrittsdatum" => $user['beitrittsdatum'],
+    "babyVorname" => $user['babyVorname'],
+    "babyNachname" => $user['babyNachname'],
+    "babyGeburtsdatum" => $user['babyGeburtsdatum'],
+    "babyGewicht" => $user['gewicht']
 ]);
