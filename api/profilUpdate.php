@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $babyNachname = trim($data['babyNachname'] ?? '');
     $babyGeburtsdatum = $data['babyGeburtsdatum'] ?? null;
     $babyGewicht = $data['babyGewicht'] ?? null;
+    $windelgroesse = $data['windelgroesse'] ?? 0;
 
     if (!$vorname || !$nachname) {
         echo json_encode(["status" => "error", "message" => "Vorname und Nachname sind erforderlich"]);
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ":babyNachname" => $babyNachname,
             ":babyGeburtsdatum"   => $babyGeburtsdatum,
             ":gewicht" => $babyGewicht,
-            ":windelgroesse" => :windelgroesse
+            ":windelgroesse" => $windelgroesse,
             ":userID"   => $userID
         ]);
 

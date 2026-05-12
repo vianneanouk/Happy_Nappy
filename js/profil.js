@@ -55,7 +55,7 @@ document.getElementById("profilForm").addEventListener("submit", async (e) => {
       }),
     });
 
-    const result = await response.json();
+    const result = await response.text();
     console.log("Update response:", result);
 
     if (result.status === "success") {
@@ -84,7 +84,8 @@ function getRecommendedSize(weight) {
 // Event: Gewicht wird eingegeben
 document.getElementById("babyGewicht").addEventListener("input", (e) => {
     const weight = e.target.value;
-    updateDiaperHighlight(weight); // Deine Tabellen-Markierung von vorhin
+    console.log("Gewicht eingegeben:", weight);
+    //updateDiaperHighlight(weight); // Deine Tabellen-Markierung von vorhin
 
     if (isAutoMode && weight > 0) {
         const recommendation = getRecommendedSize(weight);
