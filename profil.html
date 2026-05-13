@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="css/profil.css" />
   </head>
   <body>
-    <h1>Profil</h1>
+
+    <main class="profil-page">
+
+      <section class="profil-header">
+        <h1>Dein Profil</h1>
+      </section>
+
 
     <form id="profilForm">
       <div>
@@ -85,8 +91,49 @@
     </table>
   </div>
 
+   <nav class="bottom-nav">
+
+        <a href="protected.html" class="nav-item">
+          <div class="nav-icon">
+            <img src="bilder/Icon1.png" alt="Home">
+          </div>
+
+          <span>Home</span>
+        </a>
+
+
+        <a href="bestellung.html" class="nav-item">
+          <div class="nav-icon">
+            <img src="bilder/Icon2.png" alt="Bestellung">
+          </div>
+
+          <span>Bestellung</span>
+        </a>
+
+
+        <a href="statistik.html" class="nav-item">
+          <div class="nav-icon">
+            <img src="bilder/Icon3.png" alt="Statistik">
+          </div>
+
+          <span>Statistik</span>
+        </a>
+
+
+        <a href="profil.html" class="nav-item active">
+          <div class="nav-icon">
+            <img src="bilder/Icon4.png" alt="Profil">
+          </div>
+
+          <span>Profil</span>
+        </a>
+
+      </nav>
+
   
     </form>
+
+    </main>
 
      <script src="js/auth.js"></script>
     <script src="js/profil.js" type="module"></script>
