@@ -1,101 +1,255 @@
 async function loadProfile() {
-  
+
     try {
-      const response = await fetch("api/profil.php", {
-        credentials: "include",
-        })
 
-      const result = await response.json();
+        const response = await fetch(
+            "api/profil.php",
+            {
+                credentials: "include"
+            }
+        );
 
-      console.log("Profile data", result);
-      
-      document.querySelector("#vorname").value = result.vorname || "";
-      document.getElementById("nachname").value = result.nachname || "";
-      document.getElementById("email").value = result.email || "";
-      document.getElementById("beitrittsdatum").value = result.beitrittsdatum || "";
-      document.getElementById("babyVorname").value = result.babyVorname || "";
-      document.getElementById("babyNachname").value = result.babyNachname || "";
-      document.getElementById("babyGeburtsdatum").value = result.babyGeburtsdatum || "";
-      document.getElementById("babyGewicht").value = result.babyGewicht || "";
+        const result = await response.json();
 
-      } catch (error) {
-        console.error ("Failed to load profile:", error);
-        
-}
-}
+        console.log(result);
 
-loadProfile();
+        // Userdaten
+        document.getElementById("vorname").value =
+            result.user.vorname || "";
 
-document.getElementById("profilForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+        document.getElementById("nachname").value =
+            result.user.nachname || "";
 
-  // 1. Werte aus den Feldern auslesen
-  const vorname = document.getElementById("vorname").value.trim();
-  const nachname = document.getElementById("nachname").value.trim();
-  const babyVorname = document.getElementById("babyVorname").value.trim();
-  const babyNachname = document.getElementById("babyNachname").value.trim();
-  const babyGeburtsdatum = document.getElementById("babyGeburtsdatum").value;
-  const babyGewicht = document.getElementById("babyGewicht").value.trim();
+        document.getElementById("email").value =
+            result.user.email || "";
 
-  try {
-    const response = await fetch("api/profilUpdate.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // HIER FEHLTEN DIE DATEN: Alle Variablen müssen hier rein!
-      body: JSON.stringify({
-        vorname,
-        nachname,
-        babyVorname,
-        babyNachname,
-        babyGeburtsdatum,
-        babyGewicht, // Das PHP-Skript erwartet diesen Schlüssel
-        windelgroesse: document.getElementById("windelgroesse").value
-      }),
-    });
+        document.getElementById("beitrittsdatum").value =
+            result.user.beitrittsdatum || "";
 
-    const result = await response.text();
-    console.log("Update response:", result);
+        // Kinder anzeigen
+        renderKinder(result.kinder);
 
-    if (result.status === "success") {
-      alert("Profil erfolgreich gespeichert!");
-    } else {
-      alert("Fehler: " + result.message);
+    } catch (error) {
+
+        console.error("Profil konnte nicht geladen werden", error);
+
     }
+}
 
-  } catch (error) {
-    console.error("Failed to update profile:", error);
-  }
-});
+function getWindelgroesse(gewicht) {
 
-let isAutoMode = true; // Solange true, schlägt das System die Grösse vor
+    gewicht = parseFloat(gewicht);
 
-// Funktion: Empfehlung berechnen
-function getRecommendedSize(weight) {
-    const w = parseFloat(weight);
-    if (w < 3) return 0;
-    if (w <= 5) return 1;
-    if (w <= 8) return 2;
-    if (w <= 10) return 3;
+    if (gewicht < 3) return 0;
+    if (gewicht <= 5) return 1;
+    if (gewicht <= 8) return 2;
+    if (gewicht <= 10) return 3;
+
     return 4;
 }
 
-// Event: Gewicht wird eingegeben
-document.getElementById("babyGewicht").addEventListener("input", (e) => {
-    const weight = e.target.value;
-    console.log("Gewicht eingegeben:", weight);
-    //updateDiaperHighlight(weight); // Deine Tabellen-Markierung von vorhin
+function createKindHTML(kind = {}) {
 
-    if (isAutoMode && weight > 0) {
-        const recommendation = getRecommendedSize(weight);
-        document.getElementById("windelgroesse").value = recommendation;
-        document.getElementById("empfehlung-text").innerText = "Automatisch vorgeschlagen";
+    const windelgroesse =
+        kind.windelgroesse ||
+        getWindelgroesse(kind.gewicht || 0);
+
+    return `
+        <div class="kind-block">
+
+            <input
+                type="hidden"
+                class="kindId"
+                value="${kind.id || ""}"
+            >
+
+            <div>
+                <label>Vorname</label>
+
+                <input
+                    type="text"
+                    class="kindVorname"
+                    value="${kind.vorname || ""}"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>Geburtsdatum</label>
+
+                <input
+                    type="date"
+                    class="kindGeburtsdatum"
+                    value="${kind.geburtsdatum || ""}"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>Gewicht (kg)</label>
+
+                <input
+                    type="number"
+                    step="0.1"
+                    class="kindGewicht"
+                    value="${kind.gewicht || ""}"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>Windelgrösse</label>
+
+                <input
+                    type="text"
+                    class="kindWindelgroesse"
+                    value="${windelgroesse}"
+                    readonly
+                >
+            </div>
+
+            <button
+                type="button"
+                class="removeKindBtn"
+            >
+                Entfernen
+            </button>
+
+            <hr>
+
+        </div>
+    `;
+}
+
+function renderKinder(kinder) {
+
+    const container =
+        document.getElementById("kinderContainer");
+
+    container.innerHTML = "";
+
+    kinder.forEach(kind => {
+
+        container.innerHTML += createKindHTML(kind);
+
+    });
+
+    attachEvents();
+}
+
+document.getElementById("addKindBtn")
+.addEventListener("click", () => {
+
+    const container =
+        document.getElementById("kinderContainer");
+
+    container.innerHTML += createKindHTML();
+
+    attachEvents();
+});
+
+function attachEvents() {
+
+    // Entfernen
+    document.querySelectorAll(".removeKindBtn")
+    .forEach(btn => {
+
+        btn.onclick = () => {
+
+            btn.closest(".kind-block").remove();
+
+        };
+
+    });
+
+    // Gewicht ändern
+    document.querySelectorAll(".kindGewicht")
+    .forEach(input => {
+
+        input.oninput = () => {
+
+            const block =
+                input.closest(".kind-block");
+
+            const gewicht = input.value;
+
+            const groesse =
+                getWindelgroesse(gewicht);
+
+            block.querySelector(
+                ".kindWindelgroesse"
+            ).value = groesse;
+
+        };
+
+    });
+}
+
+document.getElementById("profilForm")
+.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const vorname =
+        document.getElementById("vorname").value;
+
+    const nachname =
+        document.getElementById("nachname").value;
+
+    const kinder = [];
+
+    document.querySelectorAll(".kind-block")
+    .forEach(block => {
+
+        kinder.push({
+
+            id:
+                block.querySelector(".kindId").value,
+
+            vorname:
+                block.querySelector(".kindVorname").value,
+
+            geburtsdatum:
+                block.querySelector(".kindGeburtsdatum").value,
+
+            gewicht:
+                block.querySelector(".kindGewicht").value,
+
+            windelgroesse:
+                block.querySelector(".kindWindelgroesse").value
+
+        });
+
+    });
+
+    try {
+
+        const response = await fetch(
+            "api/profilUpdate.php",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    vorname,
+                    nachname,
+                    kinder
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        alert(result.message);
+
+    } catch (error) {
+
+        console.error(error);
+
     }
 });
 
-// Event: User ändert die Grösse manuell
-document.getElementById("windelgroesse").addEventListener("change", () => {
-    isAutoMode = false; // Automatik deaktivieren, da User manuell gewählt hat
-    document.getElementById("empfehlung-text").innerText = "Manuell angepasst";
-});
+loadProfile();
