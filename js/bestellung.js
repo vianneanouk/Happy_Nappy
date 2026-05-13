@@ -6,17 +6,22 @@ async function loadBestellungData() {
 
     const data = await response.json();
 
-    if (data.status !== "success" || data.kinder.length === 0) {
+    const container = document.getElementById("ordersContainer");
+    const emptyState = document.getElementById("emptyState");
+
+    container.innerHTML = "";
+
+    if (data.status !== "success" || !data.kinder || data.kinder.length === 0) {
+      emptyState.style.display = "block";
       return;
     }
 
-    fillOrderData(1, data.kinder[0]);
+    emptyState.style.display = "none";
 
-    if (data.kinder[1]) {
-      fillOrderData(2, data.kinder[1]);
-    } else {
-      hideSecondOrder();
-    }
+    data.kinder.forEach((kind) => {
+      const orderElement = createOrderElement(kind);
+      container.appendChild(orderElement);
+    });
 
   } catch (error) {
     console.error("Bestelldaten konnten nicht geladen werden:", error);
@@ -24,27 +29,76 @@ async function loadBestellungData() {
 }
 
 
-function fillOrderData(number, kind) {
-  const distanz = Number(kind.aktuelle_distanz ?? 0);
+function createOrderElement(kind) {
+  const distanz = Number(kind.aktuelle_distanz ?? 200);
   const bestandWindeln = calculateDiapersFromDistance(distanz);
   const bestellung = getOrderStatus(bestandWindeln);
 
-  document.getElementById(`kind${number}Name`).textContent = kind.vorname;
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("order-child");
 
-  document.getElementById(`kind${number}Status`).textContent =
-    bestellung.status;
+  wrapper.innerHTML = `
+    <section class="toggle-card">
+      <h3>Automatische Bestellung für ${kind.vorname} aktiv</h3>
+    </section>
 
-  document.getElementById(`kind${number}OrderDate`).textContent =
-    bestellung.bestelltAm;
+    <section class="status-card">
+      <div class="status-top">
+        <div>
+          <h2>Status</h2>
+          <p>${bestellung.status}</p>
+        </div>
 
-  document.getElementById(`kind${number}PackageText`).textContent =
-    bestellung.packageText;
+        <div class="status-icon">
+          <img src="bilder/Icon2.png" alt="">
+        </div>
+      </div>
 
-  document.getElementById(`kind${number}DeliveryDate`).textContent =
-    bestellung.datum;
+      <div class="timeline">
+        <div class="timeline-item active">
+          <div class="timeline-circle"></div>
 
-  document.getElementById(`kind${number}DeliveryDateTimeline`).textContent =
-    bestellung.timelineText;
+          <div>
+            <h4>Bestellung</h4>
+            <p>${bestellung.bestelltAm}</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-circle ${bestellung.isActive ? "" : "inactive"}"></div>
+
+          <div>
+            <h4>Lieferung</h4>
+            <p>${bestellung.timelineText}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="details-card">
+      <h2>Lieferdetails</h2>
+
+      <div class="detail-item">
+        <img src="bilder/Paket.png" alt="Paket">
+
+        <div>
+          <p class="detail-label">Paket</p>
+          <h4>${bestellung.packageText}</h4>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <img src="bilder/Check.png" alt="Check">
+
+        <div>
+          <p class="detail-label">Voraussichtliche Lieferung</p>
+          <h4>${bestellung.datum}</h4>
+        </div>
+      </div>
+    </section>
+  `;
+
+  return wrapper;
 }
 
 
@@ -52,7 +106,8 @@ function calculateDiapersFromDistance(distanz) {
   const regalHoehe = 200;
   const windelnBeiVollemRegal = 28;
 
-  const windeln = (distanz / regalHoehe) * windelnBeiVollemRegal;
+  const windeln =
+    ((regalHoehe - distanz) / regalHoehe) * windelnBeiVollemRegal;
 
   return Math.round(Math.min(Math.max(windeln, 0), windelnBeiVollemRegal));
 }
@@ -60,16 +115,20 @@ function calculateDiapersFromDistance(distanz) {
 
 function getOrderStatus(bestandWindeln) {
   if (bestandWindeln < 14) {
+    const lieferdatum = getDeliveryDate();
+
     return {
+      isActive: true,
       status: "Unterwegs",
       bestelltAm: "heute automatisch ausgelöst",
-      packageText: "Windeln (28 Stück)",
-      datum: getDeliveryDate(),
-      timelineText: `voraussichtlich ${getDeliveryDate()}`,
+      packageText: "Windeln, 28 Stück",
+      datum: lieferdatum,
+      timelineText: `voraussichtlich ${lieferdatum}`,
     };
   }
 
   return {
+    isActive: false,
     status: "Keine Bestellung",
     bestelltAm: "nicht ausgelöst",
     packageText: "Aktuell kein Paket unterwegs",
@@ -88,21 +147,6 @@ function getDeliveryDate() {
     day: "numeric",
     month: "long",
     year: "numeric",
-  });
-}
-
-
-function hideSecondOrder() {
-  const elements = [
-    document.getElementById("kind2Toggle"),
-    document.getElementById("kind2StatusCard"),
-    document.getElementById("kind2Details"),
-  ];
-
-  elements.forEach((element) => {
-    if (element) {
-      element.style.display = "none";
-    }
   });
 }
 

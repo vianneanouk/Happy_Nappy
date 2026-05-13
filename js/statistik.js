@@ -6,17 +6,34 @@ async function loadStatistikData() {
 
     const data = await response.json();
 
-    if (data.status !== "success" || data.kinder.length === 0) {
+    console.log("Statistik API:", data);
+
+    const container = document.getElementById("statisticsContainer");
+    const emptyState = document.getElementById("emptyState");
+
+    if (!container || !emptyState) {
+      console.error("statisticsContainer oder emptyState fehlt im HTML.");
       return;
     }
 
-    fillChildStatistics(1, data.kinder[0]);
+    container.innerHTML = "";
 
-    if (data.kinder[1]) {
-      fillChildStatistics(2, data.kinder[1]);
-    } else {
-      hideSecondChildStatistics();
+    if (data.status !== "success" || !data.kinder || data.kinder.length === 0) {
+      emptyState.style.display = "block";
+      return;
     }
+
+    emptyState.style.display = "none";
+
+    data.kinder.forEach((kind, index) => {
+      const statisticElement = createStatisticElement(kind, index);
+      container.appendChild(statisticElement);
+
+      fillWeekBars(`weeks-${kind.id}`, `weeks-axis-${kind.id}`, kind.wochen || []);
+      fillDayBars(`days-${kind.id}`, `days-axis-${kind.id}`, kind.tage || []);
+    });
+
+    initChartSwitches();
 
   } catch (error) {
     console.error("Statistik konnte nicht geladen werden:", error);
@@ -24,11 +41,92 @@ async function loadStatistikData() {
 }
 
 
-function fillChildStatistics(number, kind) {
-  document.getElementById(`kind${number}Name`).textContent = kind.vorname;
+function createStatisticElement(kind, index) {
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("statistic-child");
 
-  fillWeekBars(`kind${number}Weeks`, `kind${number}WeeksAxis`, kind.wochen);
-  fillDayBars(`kind${number}Days`, `kind${number}DaysAxis`, kind.tage);
+  if (index > 0) {
+    wrapper.classList.add("statistic-child-spacing");
+  }
+
+  wrapper.innerHTML = `
+    <section class="dashboard-header ${index > 0 ? "second-child-header" : ""}">
+      <p class="welcome-text">Statistik für ${kind.vorname}</p>
+      <h1>Verbrauch</h1>
+    </section>
+
+    <section class="chart-switch">
+      <button class="switch-btn active" data-child="${kind.id}" data-target="weeks">
+        6 Wochen
+      </button>
+
+      <button class="switch-btn" data-child="${kind.id}" data-target="days">
+        7 Tage
+      </button>
+    </section>
+
+    <section class="chart-card chart-${kind.id} chart-weeks active-chart">
+      <div class="chart-title">
+        <img src="bilder/Paket.png" alt="Icon">
+        <h2>Verbrauch letzte 6 Wochen</h2>
+      </div>
+
+      <div class="chart-wrapper">
+        <div class="y-axis" id="weeks-axis-${kind.id}"></div>
+
+        <div class="chart-container">
+          <div class="chart-grid"></div>
+          <div class="bars weekly-bars" id="weeks-${kind.id}"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chart-card chart-${kind.id} chart-days">
+      <div class="chart-title">
+        <img src="bilder/Paket.png" alt="Icon">
+        <h2>Verbrauch letzte 7 Tage</h2>
+      </div>
+
+      <div class="chart-wrapper">
+        <div class="y-axis" id="days-axis-${kind.id}"></div>
+
+        <div class="chart-container">
+          <div class="chart-grid"></div>
+          <div class="bars" id="days-${kind.id}"></div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  return wrapper;
+}
+
+
+function initChartSwitches() {
+  const switchButtons = document.querySelectorAll(".switch-btn");
+
+  switchButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const child = button.dataset.child;
+      const target = button.dataset.target;
+
+      document
+        .querySelectorAll(`.switch-btn[data-child="${child}"]`)
+        .forEach((btn) => btn.classList.remove("active"));
+
+      button.classList.add("active");
+
+      document
+        .querySelectorAll(`.chart-${child}`)
+        .forEach((chart) => chart.classList.remove("active-chart"));
+
+      const activeChart = document.querySelector(`.chart-${child}.chart-${target}`);
+
+      if (activeChart) {
+        activeChart.classList.add("active-chart");
+      }
+    });
+  });
 }
 
 
@@ -48,11 +146,11 @@ function fillWeekBars(containerId, axisId, weeks) {
     const height = calculateBarHeight(week.anzahl, maxValue);
 
     container.innerHTML += `
-  <div class="bar-item">
-    <div class="bar large" style="height: ${height}%;"></div>
-    <span>${week.label}</span>
-  </div>
-`;
+      <div class="bar-item">
+        <div class="bar large" style="height: ${height}%;"></div>
+        <span>${week.label}</span>
+      </div>
+    `;
   });
 }
 
@@ -89,7 +187,7 @@ function fillYAxis(axisId, maxValue) {
 
   axis.innerHTML = "";
 
-  const step = Math.ceil(maxValue / 3);
+  const step = Math.max(1, Math.ceil(maxValue / 3));
 
   const values = [
     step * 3,
@@ -112,8 +210,7 @@ function fillMissingDays(days) {
     const date = new Date();
     date.setDate(date.getDate() - i);
 
-    const dateString = date.toISOString().split("T")[0];
-
+    const dateString = formatDate(date);
     const foundDay = days.find((day) => day.datum === dateString);
 
     result.push({
@@ -141,13 +238,22 @@ function fillMissingWeeks(weeks) {
     const foundWeek = weeks.find((item) => item.woche === weekKey);
 
     result.push({
-  woche: weekKey,
-  label: `KW ${week}`,
-  anzahl: foundWeek ? Number(foundWeek.anzahl) : 0,
-});
+      woche: weekKey,
+      label: `KW ${week}`,
+      anzahl: foundWeek ? Number(foundWeek.anzahl) : 0,
+    });
   }
 
   return result;
+}
+
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 
@@ -198,47 +304,6 @@ function calculateBarHeight(value, maxValue) {
 
   return Math.max((Number(value) / maxValue) * 100, 4);
 }
-
-
-function hideSecondChildStatistics() {
-  const elements = [
-    document.querySelector(".child-spacer"),
-    document.getElementById("kind2Header"),
-    document.getElementById("kind2Switch"),
-    document.querySelector(".noah-chart.chart-weeks"),
-    document.querySelector(".noah-chart.chart-days"),
-  ];
-
-  elements.forEach((element) => {
-    if (element) {
-      element.style.display = "none";
-    }
-  });
-}
-
-
-const switchButtons = document.querySelectorAll(".switch-btn");
-
-switchButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const child = button.dataset.child;
-    const target = button.dataset.target;
-
-    document
-      .querySelectorAll(`.switch-btn[data-child="${child}"]`)
-      .forEach((btn) => btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    document
-      .querySelectorAll(`.${child}-chart`)
-      .forEach((chart) => chart.classList.remove("active-chart"));
-
-    document
-      .querySelector(`.${child}-chart.chart-${target}`)
-      .classList.add("active-chart");
-  });
-});
 
 
 window.addEventListener("load", loadStatistikData);
