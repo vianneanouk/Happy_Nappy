@@ -53,16 +53,16 @@ async function loadDashboardData() {
 function fillChildData(number, kind) {
   const distanz = Number(kind.aktuelle_distanz ?? 0);
   const bestandWindeln = calculateDiapersFromDistance(distanz);
-
   const verbrauch = Number(kind.verbrauch_woche ?? 0);
+  const bestellung = getOrderStatus(bestandWindeln);
 
   document.getElementById(`kind${number}Name`).textContent = kind.vorname;
   document.getElementById(`kind${number}Bestand`).textContent = bestandWindeln;
   document.getElementById(`kind${number}Tage`).textContent = calculateDaysLeft(bestandWindeln);
 
   document.getElementById(`kind${number}NameLieferung`).textContent = kind.vorname;
-  document.getElementById(`kind${number}LieferMenge`).textContent = 28;
-  document.getElementById(`kind${number}LieferDatum`).textContent = "15. Mai";
+  document.getElementById(`kind${number}LieferStatus`).textContent = bestellung.statusText;
+  document.getElementById(`kind${number}LieferDatum`).textContent = bestellung.datum;
 
   document.getElementById(`kind${number}NameVerbrauch`).textContent = kind.vorname;
   document.getElementById(`kind${number}Verbrauch`).textContent = verbrauch;
@@ -98,6 +98,33 @@ function calculateProgress(bestandWindeln) {
   const progress = (bestandWindeln / maxBestand) * 100;
 
   return Math.min(progress, 100);
+}
+
+
+function getOrderStatus(bestandWindeln) {
+  if (bestandWindeln < 14) {
+    return {
+      statusText: "28 Windeln unterwegs",
+      datum: getDeliveryDate(),
+    };
+  }
+
+  return {
+    statusText: "Gerade keine Bestellung am Laufen",
+    datum: "keine Lieferung geplant",
+  };
+}
+
+
+function getDeliveryDate() {
+  const date = new Date();
+
+  date.setDate(date.getDate() + 3);
+
+  return date.toLocaleDateString("de-CH", {
+    day: "numeric",
+    month: "long",
+  });
 }
 
 

@@ -48,10 +48,11 @@ function fillWeekBars(containerId, axisId, weeks) {
     const height = calculateBarHeight(week.anzahl, maxValue);
 
     container.innerHTML += `
-      <div class="bar-item">
-        <div class="bar large" style="height: ${height}%;"></div>
-      </div>
-    `;
+  <div class="bar-item">
+    <div class="bar large" style="height: ${height}%;"></div>
+    <span>${week.label}</span>
+  </div>
+`;
   });
 }
 
@@ -140,9 +141,10 @@ function fillMissingWeeks(weeks) {
     const foundWeek = weeks.find((item) => item.woche === weekKey);
 
     result.push({
-      woche: weekKey,
-      anzahl: foundWeek ? Number(foundWeek.anzahl) : 0,
-    });
+  woche: weekKey,
+  label: `KW ${week}`,
+  anzahl: foundWeek ? Number(foundWeek.anzahl) : 0,
+});
   }
 
   return result;
