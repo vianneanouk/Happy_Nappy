@@ -11,68 +11,61 @@
   </head>
 
   <body>
-
     <main class="bestellung-page">
 
       <section class="bestellung-header">
-
         <h1>Deine Bestellung</h1>
-
-
       </section>
 
 
+      <!-- KIND 1 -->
       <section class="toggle-card">
-
-        <h3>Automatische Bestellung für Lena aktiv</h3>
-
+        <h3>
+          Automatische Bestellung für
+          <span id="kind1Name">Kind</span>
+          aktiv
+        </h3>
       </section>
 
 
       <section class="status-card">
-
         <div class="status-top">
-
           <div>
             <h2>Status</h2>
-            <p>Unterwegs</p>
+            <p id="kind1Status">Unterwegs</p>
           </div>
 
           <div class="status-icon">
             <img src="bilder/Icon2.png" alt="">
           </div>
-
         </div>
 
         <div class="timeline">
-
           <div class="timeline-item active">
             <div class="timeline-circle"></div>
 
             <div>
               <h4>Bestellt</h4>
-              <p>28. April</p>
+              <p id="kind1OrderDate">28. April</p>
             </div>
           </div>
-
-
 
           <div class="timeline-item">
             <div class="timeline-circle inactive"></div>
 
             <div>
               <h4>Geliefert</h4>
-              <p>voraussichtlich 2. Mai 2026</p>
+              <p>
+                voraussichtlich
+                <span id="kind1DeliveryDateTimeline">15. Mai 2026</span>
+              </p>
             </div>
           </div>
-
         </div>
-
       </section>
 
 
       <section class="details-card">
-
         <h2>Lieferdetails</h2>
 
         <div class="detail-item">
@@ -80,123 +73,140 @@
 
           <div>
             <p class="detail-label">Paket</p>
-            <h4>Windeln Grösse 2 (60 Stück)</h4>
+            <h4>
+              Windeln Grösse
+              <span id="kind1Size">0</span>
+              (<span id="kind1Amount">28</span> Stück)
+            </h4>
           </div>
         </div>
-
-
 
         <div class="detail-item">
           <img src="bilder/Check.png" alt="Check">
 
           <div>
             <p class="detail-label">Voraussichtliche Lieferung</p>
-            <h4>2. Mai 2026</h4>
+            <h4 id="kind1DeliveryDate">15. Mai 2026</h4>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- KIND 2 -->
+      <section class="toggle-card second-order" id="kind2Toggle">
+        <h3>
+          Automatische Bestellung für
+          <span id="kind2Name">Kind</span>
+          aktiv
+        </h3>
+      </section>
+
+
+      <section class="status-card" id="kind2StatusCard">
+        <div class="status-top">
+          <div>
+            <h2>Status</h2>
+            <p id="kind2Status">Unterwegs</p>
+          </div>
+
+          <div class="status-icon">
+            <img src="bilder/Icon2.png" alt="">
           </div>
         </div>
 
+        <div class="timeline">
+          <div class="timeline-item active">
+            <div class="timeline-circle"></div>
+
+            <div>
+              <h4>Bestellt</h4>
+              <p id="kind2OrderDate">28. April</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-circle inactive"></div>
+
+            <div>
+              <h4>Geliefert</h4>
+              <p>
+                voraussichtlich
+                <span id="kind2DeliveryDateTimeline">15. Mai 2026</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-<section class="toggle-card second-order">
-  <h3>Automatische Bestellung für Noah aktiv</h3>
-</section>
 
-<section class="status-card">
-  <div class="status-top">
-    <div>
-      <h2>Status</h2>
-      <p>Unterwegs</p>
-    </div>
+      <section class="details-card" id="kind2Details">
+        <h2>Lieferdetails</h2>
 
-    <div class="status-icon">
-      <img src="bilder/Icon2.png" alt="">
-    </div>
-  </div>
+        <div class="detail-item">
+          <img src="bilder/Paket.png" alt="Paket">
 
-  <div class="timeline">
-    <div class="timeline-item active">
-      <div class="timeline-circle"></div>
+          <div>
+            <p class="detail-label">Paket</p>
+            <h4>
+              Windeln Grösse
+              <span id="kind2Size">0</span>
+              (<span id="kind2Amount">28</span> Stück)
+            </h4>
+          </div>
+        </div>
 
-      <div>
-        <h4>Bestellt</h4>
-        <p>29. April</p>
-      </div>
-    </div>
+        <div class="detail-item">
+          <img src="bilder/Check.png" alt="Check">
 
-    <div class="timeline-item">
-      <div class="timeline-circle inactive"></div>
-
-      <div>
-        <h4>Geliefert</h4>
-        <p>voraussichtlich 3. Mai 2026</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="details-card">
-  <h2>Lieferdetails</h2>
-
-  <div class="detail-item">
-    <img src="bilder/Paket.png" alt="Paket">
-
-    <div>
-      <p class="detail-label">Paket</p>
-      <h4>Windeln Grösse 4 (48 Stück)</h4>
-    </div>
-  </div>
-
-  <div class="detail-item">
-    <img src="bilder/Check.png" alt="Check">
-
-    <div>
-      <p class="detail-label">Voraussichtliche Lieferung</p>
-      <h4>3. Mai 2026</h4>
-    </div>
-  </div>
-</section>
+          <div>
+            <p class="detail-label">Voraussichtliche Lieferung</p>
+            <h4 id="kind2DeliveryDate">15. Mai 2026</h4>
+          </div>
+        </div>
+      </section>
 
 
       <nav class="bottom-nav">
 
-  <a href="protected.html" class="nav-item">
-    <div class="nav-icon">
-      <img src="bilder/Icon1.png" alt="Home">
-    </div>
+        <a href="protected.html" class="nav-item">
+          <div class="nav-icon">
+            <img src="bilder/Icon1.png" alt="Home">
+          </div>
 
-    <span>Home</span>
-  </a>
-
-
-  <a href="bestellung.html" class="nav-item active">
-    <div class="nav-icon">
-      <img src="bilder/Icon2.png" alt="Bestellung">
-    </div>
-
-    <span>Bestellung</span>
-  </a>
+          <span>Home</span>
+        </a>
 
 
-  <a href="statistik.html" class="nav-item">
-    <div class="nav-icon">
-      <img src="bilder/Icon3.png" alt="Statistik">
-    </div>
+        <a href="bestellung.html" class="nav-item active">
+          <div class="nav-icon">
+            <img src="bilder/Icon2.png" alt="Bestellung">
+          </div>
 
-    <span>Prognose</span>
-  </a>
+          <span>Bestellung</span>
+        </a>
 
 
-  <a href="profil.html" class="nav-item">
-    <div class="nav-icon">
-      <img src="bilder/Icon4.png" alt="Profil">
-    </div>
+        <a href="statistik.html" class="nav-item">
+          <div class="nav-icon">
+            <img src="bilder/Icon3.png" alt="Statistik">
+          </div>
 
-    <span>Profil</span>
-  </a>
+          <span>Statistik</span>
+        </a>
 
-</nav>
+
+        <a href="profil.html" class="nav-item">
+          <div class="nav-icon">
+            <img src="bilder/Icon4.png" alt="Profil">
+          </div>
+
+          <span>Profil</span>
+        </a>
+
+      </nav>
 
     </main>
 
+    <script src="js/bestellung.js"></script>
   </body>
 </html>

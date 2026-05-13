@@ -54,7 +54,7 @@ body {
 .welcome-text {
   margin-bottom: 12px;
 
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
 
   font-size: 18px;
 }
@@ -68,24 +68,74 @@ body {
 
 
 /* =========================
+   SWITCH
+========================= */
+
+.chart-switch {
+  width: calc(100% - 40px);
+
+  margin: -70px auto 24px;
+  padding: 6px;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  border-radius: 24px;
+
+  display: flex;
+  gap: 6px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.switch-btn {
+  width: 50%;
+  height: 48px;
+
+  border: none;
+  border-radius: 18px;
+
+  background: transparent;
+  color: var(--text-light);
+
+  font-family: var(--font-main);
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.switch-btn.active {
+  background: linear-gradient(
+    135deg,
+    #9F83CF 0%,
+    #B7BEDC 100%
+  );
+
+  color: white;
+}
+
+
+/* =========================
    CHART CARD
 ========================= */
 
 .chart-card {
+  display: none;
+
   width: calc(100% - 40px);
 
-  margin: -70px auto 24px;
+  margin: 0 auto 24px;
   padding: 30px 28px;
 
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.92);
 
   border-radius: 34px;
 
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
-.chart-card + .chart-card {
-  margin-top: 24px;
+.chart-card.active-chart {
+  display: block;
 }
 
 
@@ -180,6 +230,20 @@ body {
 
 
 /* =========================
+   SECOND CHILD
+========================= */
+
+.child-spacer {
+  height: 50px;
+}
+
+.second-child-header {
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+}
+
+
+/* =========================
    BOTTOM NAVIGATION
 ========================= */
 
@@ -250,19 +314,4 @@ body {
     #9F83CF 0%,
     #B7BEDC 100%
   );
-}
-
-.child-spacer {
-  height: 50px;
-}
-
-.second-child-header {
-  margin-top: 0;
-
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
-}
-
-.second-chart {
-  margin-top: -70px;
 }

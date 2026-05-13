@@ -11,242 +11,101 @@
   </head>
 
   <body>
-
     <main class="dashboard-page">
 
       <section class="dashboard-header">
-
         <p class="welcome-text">
-          Statistik für Lena
+          Statistik für <span id="kind1Name">Kind</span>
         </p>
 
-        <h1>
-          Verbrauch
-        </h1>
-
+        <h1>Verbrauch</h1>
       </section>
 
 
-      <section class="chart-card">
+      <section class="chart-switch">
+        <button class="switch-btn active" data-child="lena" data-target="weeks">
+          6 Wochen
+        </button>
 
+        <button class="switch-btn" data-child="lena" data-target="days">
+          7 Tage
+        </button>
+      </section>
+
+
+      <section class="chart-card lena-chart chart-weeks active-chart">
         <div class="chart-title">
-
           <img src="bilder/Paket.png" alt="Icon">
-
-          <h2>
-            Verbrauch letzte 6 Wochen
-          </h2>
-
+          <h2>Verbrauch letzte 6 Wochen</h2>
         </div>
-
 
         <div class="chart-container">
-
           <div class="chart-grid"></div>
-
-          <div class="bars weekly-bars">
-
-            <div class="bar-item">
-              <div class="bar large" style="height: 42%;"></div>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar large" style="height: 38%;"></div>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar large" style="height: 45%;"></div>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar large" style="height: 40%;"></div>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar large" style="height: 43%;"></div>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar large" style="height: 40%;"></div>
-            </div>
-
-          </div>
-
+          <div class="bars weekly-bars" id="kind1Weeks"></div>
         </div>
-
       </section>
 
 
-      <section class="chart-card">
-
+      <section class="chart-card lena-chart chart-days">
         <div class="chart-title">
-
           <img src="bilder/Paket.png" alt="Icon">
-
-          <h2>
-            Verbrauch letzte 7 Tage
-          </h2>
-
+          <h2>Verbrauch letzte 7 Tage</h2>
         </div>
-
 
         <div class="chart-container">
-
           <div class="chart-grid"></div>
-
-          <div class="bars">
-
-            <div class="bar-item">
-              <div class="bar" style="height: 8%;"></div>
-              <span>Mo</span>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar" style="height: 10%;"></div>
-              <span>Di</span>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar" style="height: 8%;"></div>
-              <span>Mi</span>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar" style="height: 16%;"></div>
-              <span>Do</span>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar" style="height: 7%;"></div>
-              <span>Fr</span>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar" style="height: 10%;"></div>
-              <span>Sa</span>
-            </div>
-
-            <div class="bar-item">
-              <div class="bar" style="height: 6%;"></div>
-              <span>So</span>
-            </div>
-
-          </div>
-
+          <div class="bars" id="kind1Days"></div>
         </div>
-
       </section>
+
 
       <section class="child-spacer"></section>
 
-<section class="dashboard-header second-child-header">
 
-  <p class="welcome-text">
-    Statistik für Noah
-  </p>
+      <section class="dashboard-header second-child-header" id="kind2Header">
+        <p class="welcome-text">
+          Statistik für <span id="kind2Name">Kind</span>
+        </p>
 
-  <h1>
-    Verbrauch
-  </h1>
-
-</section>
+        <h1>Verbrauch</h1>
+      </section>
 
 
-<section class="chart-card second-chart">
+      <section class="chart-switch" id="kind2Switch">
+        <button class="switch-btn active" data-child="noah" data-target="weeks">
+          6 Wochen
+        </button>
 
-  <div class="chart-title">
-    <img src="bilder/Paket.png" alt="Icon">
-
-    <h2>Verbrauch letzte 6 Wochen</h2>
-  </div>
-
-  <div class="chart-container">
-    <div class="chart-grid"></div>
-
-    <div class="bars weekly-bars">
-
-      <div class="bar-item">
-        <div class="bar large" style="height: 39%;"></div>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar large" style="height: 41%;"></div>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar large" style="height: 36%;"></div>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar large" style="height: 44%;"></div>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar large" style="height: 40%;"></div>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar large" style="height: 43%;"></div>
-      </div>
-
-    </div>
-  </div>
-
-</section>
+        <button class="switch-btn" data-child="noah" data-target="days">
+          7 Tage
+        </button>
+      </section>
 
 
-<section class="chart-card">
+      <section class="chart-card noah-chart chart-weeks active-chart">
+        <div class="chart-title">
+          <img src="bilder/Paket.png" alt="Icon">
+          <h2>Verbrauch letzte 6 Wochen</h2>
+        </div>
 
-  <div class="chart-title">
-    <img src="bilder/Paket.png" alt="Icon">
+        <div class="chart-container">
+          <div class="chart-grid"></div>
+          <div class="bars weekly-bars" id="kind2Weeks"></div>
+        </div>
+      </section>
 
-    <h2>Verbrauch letzte 7 Tage</h2>
-  </div>
 
-  <div class="chart-container">
-    <div class="chart-grid"></div>
+      <section class="chart-card noah-chart chart-days">
+        <div class="chart-title">
+          <img src="bilder/Paket.png" alt="Icon">
+          <h2>Verbrauch letzte 7 Tage</h2>
+        </div>
 
-    <div class="bars">
-
-      <div class="bar-item">
-        <div class="bar" style="height: 7%;"></div>
-        <span>Mo</span>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar" style="height: 9%;"></div>
-        <span>Di</span>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar" style="height: 6%;"></div>
-        <span>Mi</span>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar" style="height: 14%;"></div>
-        <span>Do</span>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar" style="height: 8%;"></div>
-        <span>Fr</span>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar" style="height: 11%;"></div>
-        <span>Sa</span>
-      </div>
-
-      <div class="bar-item">
-        <div class="bar" style="height: 7%;"></div>
-        <span>So</span>
-      </div>
-
-    </div>
-  </div>
-
-</section>
+        <div class="chart-container">
+          <div class="chart-grid"></div>
+          <div class="bars" id="kind2Days"></div>
+        </div>
+      </section>
 
     </main>
 
@@ -257,38 +116,32 @@
         <div class="nav-icon">
           <img src="bilder/Icon1.png" alt="Home">
         </div>
-
         <span>Home</span>
       </a>
-
 
       <a href="bestellung.html" class="nav-item">
         <div class="nav-icon">
           <img src="bilder/Icon2.png" alt="Bestellung">
         </div>
-
         <span>Bestellung</span>
       </a>
 
-
-      <a href="prognose.html" class="nav-item active">
+      <a href="statistik.html" class="nav-item active">
         <div class="nav-icon">
-          <img src="bilder/Icon3.png" alt="Prognose">
+          <img src="bilder/Icon3.png" alt="Statistik">
         </div>
-
-        <span>Prognose</span>
+        <span>Statistik</span>
       </a>
-
 
       <a href="profil.html" class="nav-item">
         <div class="nav-icon">
           <img src="bilder/Icon4.png" alt="Profil">
         </div>
-
         <span>Profil</span>
       </a>
 
     </nav>
 
+    <script src="js/statistik.js"></script>
   </body>
 </html>
