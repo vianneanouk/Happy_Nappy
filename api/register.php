@@ -35,6 +35,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ':pass'  => $hashedPassword
     ]);
 
+    // Entscheidug: neue oder bestehende Familie
+
+    $mode = $_POST['mode'] ?? 'new';
+
+    if ($mode === "new") {
+
+    $stmt = $pdo->prepare("
+        INSERT INTO familie (familiennamen)
+        VALUES (:familiennamen)
+    ");
+
+    $stmt->execute([
+        ":familiennamen" => "Familie " . $userID
+    ]);
+
+    $familienID = $pdo->lastInsertId();
+}
+
+if ($mode === "join") {
+
+    $familienID = $_POST['familien_id'] ?? null;
+
+    if (!$familienID) {
+        die("Keine Familien-ID angegeben");
+    }
+
+    // Optional: prüfen ob Familie existiert
+    $stmt = $pdo->prepare("
+        SELECT id FROM familie WHERE id = :id
+    ");
+
+    $stmt->execute([
+        ":id" => $familienID
+    ]);
+
+    if (!$stmt->fetch()) {
+        die("Familie existiert nicht");
+    }
+}
+
+$stmt = $pdo->prepare("
+    UPDATE users
+    SET familien_id = :familienID
+    WHERE id = :userID
+");
+
+$stmt->execute([
+    ":familienID" => $familienID,
+    ":userID" => $userID
+]);
+
     echo json_encode(["status" => "success"]);
 } else {
     echo json_encode(["status" => "error", "message" => "Invalid request method"]);

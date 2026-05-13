@@ -31,7 +31,10 @@ async function loadProfile() {
 
     } catch (error) {
 
-        console.error("Profil konnte nicht geladen werden", error);
+        console.error(
+            "Profil konnte nicht geladen werden",
+            error
+        );
 
     }
 }
@@ -51,8 +54,9 @@ function getWindelgroesse(gewicht) {
 function createKindHTML(kind = {}) {
 
     const windelgroesse =
-        kind.windelgroesse ||
-        getWindelgroesse(kind.gewicht || 0);
+        kind.windelgroesse !== undefined
+            ? kind.windelgroesse
+            : getWindelgroesse(kind.gewicht || 0);
 
     return `
         <div class="kind-block">
@@ -100,12 +104,39 @@ function createKindHTML(kind = {}) {
             <div>
                 <label>Windelgrösse</label>
 
-                <input
-                    type="text"
-                    class="kindWindelgroesse"
-                    value="${windelgroesse}"
-                    readonly
-                >
+                <select class="kindWindelgroesse">
+
+                    <option value="0"
+                        ${windelgroesse == 0 ? "selected" : ""}
+                    >
+                        Grösse 0
+                    </option>
+
+                    <option value="1"
+                        ${windelgroesse == 1 ? "selected" : ""}
+                    >
+                        Grösse 1
+                    </option>
+
+                    <option value="2"
+                        ${windelgroesse == 2 ? "selected" : ""}
+                    >
+                        Grösse 2
+                    </option>
+
+                    <option value="3"
+                        ${windelgroesse == 3 ? "selected" : ""}
+                    >
+                        Grösse 3
+                    </option>
+
+                    <option value="4"
+                        ${windelgroesse == 4 ? "selected" : ""}
+                    >
+                        Grösse 4
+                    </option>
+
+                </select>
             </div>
 
             <button
@@ -130,7 +161,8 @@ function renderKinder(kinder) {
 
     kinder.forEach(kind => {
 
-        container.innerHTML += createKindHTML(kind);
+        container.innerHTML +=
+            createKindHTML(kind);
 
     });
 
@@ -171,14 +203,36 @@ function attachEvents() {
             const block =
                 input.closest(".kind-block");
 
-            const gewicht = input.value;
+            const gewicht =
+                input.value;
 
             const groesse =
                 getWindelgroesse(gewicht);
 
-            block.querySelector(
-                ".kindWindelgroesse"
-            ).value = groesse;
+            const select =
+                block.querySelector(
+                    ".kindWindelgroesse"
+                );
+
+            // Nur automatisch setzen,
+            // wenn User nicht manuell geändert hat
+            if (!select.dataset.manual) {
+
+                select.value = groesse;
+
+            }
+
+        };
+
+    });
+
+    // Manuelle Änderung merken
+    document.querySelectorAll(".kindWindelgroesse")
+    .forEach(select => {
+
+        select.onchange = () => {
+
+            select.dataset.manual = "true";
 
         };
 
@@ -210,13 +264,19 @@ document.getElementById("profilForm")
                 block.querySelector(".kindVorname").value,
 
             geburtsdatum:
-                block.querySelector(".kindGeburtsdatum").value,
+                block.querySelector(
+                    ".kindGeburtsdatum"
+                ).value,
 
             gewicht:
-                block.querySelector(".kindGewicht").value,
+                block.querySelector(
+                    ".kindGewicht"
+                ).value,
 
             windelgroesse:
-                block.querySelector(".kindWindelgroesse").value
+                block.querySelector(
+                    ".kindWindelgroesse"
+                ).value
 
         });
 
@@ -230,7 +290,8 @@ document.getElementById("profilForm")
                 method: "POST",
 
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
 
                 body: JSON.stringify({
@@ -241,13 +302,17 @@ document.getElementById("profilForm")
             }
         );
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
         alert(result.message);
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Profil konnte nicht gespeichert werden",
+            error
+        );
 
     }
 });
