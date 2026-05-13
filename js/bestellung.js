@@ -25,19 +25,70 @@ async function loadBestellungData() {
 
 
 function fillOrderData(number, kind) {
-  const deliveryDate = "15. Mai 2026";
-  const orderDate = "28. April";
-  const amount = 28;
+  const distanz = Number(kind.aktuelle_distanz ?? 0);
+  const bestandWindeln = calculateDiapersFromDistance(distanz);
+  const bestellung = getOrderStatus(bestandWindeln);
 
   document.getElementById(`kind${number}Name`).textContent = kind.vorname;
-  document.getElementById(`kind${number}Status`).textContent = "Unterwegs";
-  document.getElementById(`kind${number}OrderDate`).textContent = orderDate;
 
-  document.getElementById(`kind${number}Size`).textContent = kind.windelgroesse;
-  document.getElementById(`kind${number}Amount`).textContent = amount;
+  document.getElementById(`kind${number}Status`).textContent =
+    bestellung.status;
 
-  document.getElementById(`kind${number}DeliveryDate`).textContent = deliveryDate;
-  document.getElementById(`kind${number}DeliveryDateTimeline`).textContent = deliveryDate;
+  document.getElementById(`kind${number}OrderDate`).textContent =
+    bestellung.bestelltAm;
+
+  document.getElementById(`kind${number}PackageText`).textContent =
+    bestellung.packageText;
+
+  document.getElementById(`kind${number}DeliveryDate`).textContent =
+    bestellung.datum;
+
+  document.getElementById(`kind${number}DeliveryDateTimeline`).textContent =
+    bestellung.timelineText;
+}
+
+
+function calculateDiapersFromDistance(distanz) {
+  const regalHoehe = 200;
+  const windelnBeiVollemRegal = 28;
+
+  const windeln = (distanz / regalHoehe) * windelnBeiVollemRegal;
+
+  return Math.round(Math.min(Math.max(windeln, 0), windelnBeiVollemRegal));
+}
+
+
+function getOrderStatus(bestandWindeln) {
+  if (bestandWindeln < 14) {
+    return {
+      status: "Unterwegs",
+      bestelltAm: "heute automatisch ausgelöst",
+      packageText: "Windeln (28 Stück)",
+      datum: getDeliveryDate(),
+      timelineText: `voraussichtlich ${getDeliveryDate()}`,
+    };
+  }
+
+  return {
+    status: "Keine Bestellung",
+    bestelltAm: "nicht ausgelöst",
+    packageText: "Aktuell kein Paket unterwegs",
+    datum: "keine Lieferung geplant",
+    timelineText: "keine Lieferung geplant",
+  };
+}
+
+
+function getDeliveryDate() {
+  const date = new Date();
+
+  date.setDate(date.getDate() + 3);
+
+  return date.toLocaleDateString("de-CH", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 
