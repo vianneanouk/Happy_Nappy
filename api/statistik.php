@@ -7,7 +7,10 @@ require_once '../system/config.php';
 
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo json_encode(["error" => "Unauthorized"]);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Unauthorized"
+    ]);
     exit;
 }
 
@@ -17,9 +20,9 @@ function distanzZuWindeln($distanz) {
     $regalHoehe = 200;
     $windelnVollesRegal = 28;
 
-    $windeln = ($distanz / $regalHoehe) * $windelnVollesRegal;
+    $windeln = (($regalHoehe - $distanz) / $regalHoehe) * $windelnVollesRegal;
 
-    return max(0, min($windeln, $windelnVollesRegal));
+    return round(max(0, min($windeln, $windelnVollesRegal)));
 }
 
 try {
@@ -30,6 +33,7 @@ try {
         FROM kinder k
         INNER JOIN users u ON u.familien_id = k.familien_id
         WHERE u.id = ?
+        ORDER BY k.id ASC
     ");
 
     $stmt->execute([$userId]);
@@ -63,8 +67,6 @@ try {
                 $verbrauch = $letzterBestand - $aktuellerBestand;
 
                 if ($verbrauch > 0) {
-                    $verbrauch = round($verbrauch);
-
                     $datum = date("Y-m-d", strtotime($messung["zeit"]));
                     $woche = date("o-W", strtotime($messung["zeit"]));
 
@@ -89,7 +91,7 @@ try {
         foreach ($tage as $datum => $anzahl) {
             $kind["tage"][] = [
                 "datum" => $datum,
-                "anzahl" => $anzahl
+                "anzahl" => round($anzahl)
             ];
         }
 
@@ -98,10 +100,12 @@ try {
         foreach ($wochen as $woche => $anzahl) {
             $kind["wochen"][] = [
                 "woche" => $woche,
-                "anzahl" => $anzahl
+                "anzahl" => round($anzahl)
             ];
         }
     }
+
+    unset($kind);
 
     echo json_encode([
         "status" => "success",
@@ -110,9 +114,11 @@ try {
 
 } catch (Exception $e) {
     http_response_code(500);
+
     echo json_encode([
-        "error" => "Server error",
-        "message" => $e->getMessage()
+        "status" => "error",
+        "message" => "Server error",
+        "details" => $e->getMessage()
     ]);
 }
 ?>

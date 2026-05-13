@@ -11,11 +11,10 @@ async function checkAuth() {
 
     const result = await response.json();
 
-    document.getElementById("userVorname").textContent = result.vorname;
-    document.getElementById("userId").textContent = result.user_id;
+    document.getElementById("userVorname").textContent = result.vorname ?? "";
+    document.getElementById("userId").textContent = result.user_id ?? "";
 
     return true;
-
   } catch (error) {
     console.error("Auth check failed:", error);
     window.location.href = "/login.html";
@@ -32,17 +31,22 @@ async function loadDashboardData() {
 
     const data = await response.json();
 
-    if (data.status !== "success" || data.kinder.length === 0) {
+    const container = document.getElementById("childrenContainer");
+    const emptyState = document.getElementById("emptyState");
+
+    container.innerHTML = "";
+
+    if (data.status !== "success" || !data.kinder || data.kinder.length === 0) {
+      emptyState.style.display = "block";
       return;
     }
 
-    fillChildData(1, data.kinder[0]);
+    emptyState.style.display = "none";
 
-    if (data.kinder[1]) {
-      fillChildData(2, data.kinder[1]);
-    } else {
-      hideSecondChild();
-    }
+    data.kinder.forEach((kind) => {
+      const childElement = createChildDashboard(kind);
+      container.appendChild(childElement);
+    });
 
   } catch (error) {
     console.error("Dashboard data failed:", error);
@@ -50,28 +54,58 @@ async function loadDashboardData() {
 }
 
 
-function fillChildData(number, kind) {
-  const distanz = Number(kind.aktuelle_distanz ?? 0);
+function createChildDashboard(kind) {
+  const distanz = Number(kind.aktuelle_distanz ?? 200);
   const bestandWindeln = calculateDiapersFromDistance(distanz);
-  const verbrauch = Number(kind.verbrauch_woche ?? 0);
+  const verbrauchWoche = Number(kind.verbrauch_woche ?? 0);
+  const verbleibendeTage = calculateDaysLeft(bestandWindeln);
+  const progress = calculateProgress(bestandWindeln);
   const bestellung = getOrderStatus(bestandWindeln);
 
-  document.getElementById(`kind${number}Name`).textContent = kind.vorname;
-  document.getElementById(`kind${number}Bestand`).textContent = bestandWindeln;
-  document.getElementById(`kind${number}Tage`).textContent = calculateDaysLeft(bestandWindeln);
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("child-dashboard");
 
-  document.getElementById(`kind${number}NameLieferung`).textContent = kind.vorname;
-  document.getElementById(`kind${number}LieferStatus`).textContent = bestellung.statusText;
-  document.getElementById(`kind${number}LieferDatum`).textContent = bestellung.datum;
+  wrapper.innerHTML = `
+    <section class="stock-card">
+      <h2>Aktueller Bestand für ${kind.vorname}</h2>
 
-  document.getElementById(`kind${number}NameVerbrauch`).textContent = kind.vorname;
-  document.getElementById(`kind${number}Verbrauch`).textContent = verbrauch;
+      <div class="stock-number">
+        <span>${bestandWindeln}</span>
+      </div>
 
-  const progress = document.getElementById(`kind${number}Progress`);
+      <p class="stock-text">Windeln verfügbar</p>
 
-  if (progress) {
-    progress.style.width = calculateProgress(bestandWindeln) + "%";
-  }
+      <p class="stock-text">
+        reicht noch für ${verbleibendeTage} Tage
+      </p>
+
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${progress}%"></div>
+      </div>
+    </section>
+
+    <section class="info-card delivery-card">
+      <h2>Nächste Lieferung für ${kind.vorname}</h2>
+
+      <p>${bestellung.statusText}</p>
+
+      <p>
+        Ankunft:
+        <span>${bestellung.datum}</span>
+      </p>
+    </section>
+
+    <section class="info-card">
+      <h2>${kind.vorname}s Verbrauch</h2>
+
+      <p>
+        <span>${verbrauchWoche}</span>
+        Windeln diese Woche
+      </p>
+    </section>
+  `;
+
+  return wrapper;
 }
 
 
@@ -79,7 +113,8 @@ function calculateDiapersFromDistance(distanz) {
   const regalHoehe = 200;
   const windelnBeiVollemRegal = 28;
 
-  const windeln = (distanz / regalHoehe) * windelnBeiVollemRegal;
+  const windeln =
+    ((regalHoehe - distanz) / regalHoehe) * windelnBeiVollemRegal;
 
   return Math.round(Math.min(Math.max(windeln, 0), windelnBeiVollemRegal));
 }
@@ -124,21 +159,6 @@ function getDeliveryDate() {
   return date.toLocaleDateString("de-CH", {
     day: "numeric",
     month: "long",
-  });
-}
-
-
-function hideSecondChild() {
-  const sections = [
-    document.getElementById("kind2Section"),
-    document.getElementById("kind2Delivery"),
-    document.getElementById("kind2Usage"),
-  ];
-
-  sections.forEach((section) => {
-    if (section) {
-      section.style.display = "none";
-    }
   });
 }
 

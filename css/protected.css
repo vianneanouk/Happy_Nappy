@@ -68,6 +68,23 @@ body {
 
 
 /* =========================
+   CHILD SECTIONS
+========================= */
+
+#childrenContainer {
+  width: 100%;
+}
+
+.child-dashboard {
+  margin-bottom: 70px;
+}
+
+.child-dashboard:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================
    STOCK CARD
 ========================= */
 
@@ -82,6 +99,10 @@ body {
   border-radius: 34px;
 
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.child-dashboard:not(:first-child) .stock-card {
+  margin-top: 0;
 }
 
 .stock-card h2 {
@@ -123,7 +144,7 @@ body {
 }
 
 .progress-fill {
-  width: 48%;
+  width: 0;
   height: 100%;
 
   border-radius: 30px;
@@ -167,10 +188,14 @@ body {
   background: rgba(246, 236, 239, 0.9);
 }
 
-.second-child {
-  margin-top: 60px;
-}
 
+/* =========================
+   EMPTY STATE
+========================= */
+
+#emptyState {
+  margin-top: -70px;
+}
 
 
 /* =========================
@@ -219,6 +244,7 @@ button {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
+
 /* =========================
    BOTTOM NAVIGATION
 ========================= */
@@ -262,13 +288,6 @@ button {
   gap: 4px;
 }
 
-.nav-icon img {
-  width: 25px;
-  height: 25px;
-
-  object-fit: contain;
-}
-
 .nav-icon {
   width: 48px;
   height: 48px;
@@ -280,6 +299,13 @@ button {
   align-items: center;
 
   font-size: 26px;
+}
+
+.nav-icon img {
+  width: 25px;
+  height: 25px;
+
+  object-fit: contain;
 }
 
 .nav-item.active {

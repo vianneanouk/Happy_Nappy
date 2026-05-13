@@ -17,172 +17,46 @@
         <h1>Deine Bestellung</h1>
       </section>
 
+      <div id="ordersContainer"></div>
 
-      <section class="toggle-card">
-        <h3>
-          Automatische Bestellung für
-          <span id="kind1Name">Kind</span>
-          aktiv
-        </h3>
+      <section class="empty-card" id="emptyState" style="display: none;">
+        <h2>Noch keine Kinder eingetragen</h2>
+        <p>Sobald Kinder in der Datenbank vorhanden sind, werden hier die automatischen Bestellungen angezeigt.</p>
       </section>
-
-
-      <section class="status-card">
-        <div class="status-top">
-          <div>
-            <h2>Status</h2>
-            <p id="kind1Status">Wird geladen...</p>
-          </div>
-
-          <div class="status-icon">
-            <img src="bilder/Icon2.png" alt="">
-          </div>
-        </div>
-
-        <div class="timeline">
-          <div class="timeline-item active">
-            <div class="timeline-circle"></div>
-
-            <div>
-              <h4>Bestellung</h4>
-              <p id="kind1OrderDate">Wird geprüft</p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-circle inactive"></div>
-
-            <div>
-              <h4>Lieferung</h4>
-              <p id="kind1DeliveryDateTimeline">noch offen</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="details-card">
-        <h2>Lieferdetails</h2>
-
-        <div class="detail-item">
-          <img src="bilder/Paket.png" alt="Paket">
-
-          <div>
-            <p class="detail-label">Paket</p>
-            <h4 id="kind1PackageText">Wird geladen...</h4>
-          </div>
-        </div>
-
-        <div class="detail-item">
-          <img src="bilder/Check.png" alt="Check">
-
-          <div>
-            <p class="detail-label">Voraussichtliche Lieferung</p>
-            <h4 id="kind1DeliveryDate">noch offen</h4>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="toggle-card second-order" id="kind2Toggle">
-        <h3>
-          Automatische Bestellung für
-          <span id="kind2Name">Kind</span>
-          aktiv
-        </h3>
-      </section>
-
-
-      <section class="status-card" id="kind2StatusCard">
-        <div class="status-top">
-          <div>
-            <h2>Status</h2>
-            <p id="kind2Status">Wird geladen...</p>
-          </div>
-
-          <div class="status-icon">
-            <img src="bilder/Icon2.png" alt="">
-          </div>
-        </div>
-
-        <div class="timeline">
-          <div class="timeline-item active">
-            <div class="timeline-circle"></div>
-
-            <div>
-              <h4>Bestellung</h4>
-              <p id="kind2OrderDate">Wird geprüft</p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-circle inactive"></div>
-
-            <div>
-              <h4>Lieferung</h4>
-              <p id="kind2DeliveryDateTimeline">noch offen</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="details-card" id="kind2Details">
-        <h2>Lieferdetails</h2>
-
-        <div class="detail-item">
-          <img src="bilder/Paket.png" alt="Paket">
-
-          <div>
-            <p class="detail-label">Paket</p>
-            <h4 id="kind2PackageText">Wird geladen...</h4>
-          </div>
-        </div>
-
-        <div class="detail-item">
-          <img src="bilder/Check.png" alt="Check">
-
-          <div>
-            <p class="detail-label">Voraussichtliche Lieferung</p>
-            <h4 id="kind2DeliveryDate">noch offen</h4>
-          </div>
-        </div>
-      </section>
-
-
-      <nav class="bottom-nav">
-
-        <a href="protected.html" class="nav-item">
-          <div class="nav-icon">
-            <img src="bilder/Icon1.png" alt="Home">
-          </div>
-          <span>Home</span>
-        </a>
-
-        <a href="bestellung.html" class="nav-item active">
-          <div class="nav-icon">
-            <img src="bilder/Icon2.png" alt="Bestellung">
-          </div>
-          <span>Bestellung</span>
-        </a>
-
-        <a href="statistik.html" class="nav-item">
-          <div class="nav-icon">
-            <img src="bilder/Icon3.png" alt="Statistik">
-          </div>
-          <span>Statistik</span>
-        </a>
-
-        <a href="profil.html" class="nav-item">
-          <div class="nav-icon">
-            <img src="bilder/Icon4.png" alt="Profil">
-          </div>
-          <span>Profil</span>
-        </a>
-
-      </nav>
 
     </main>
+
+    <nav class="bottom-nav">
+
+      <a href="protected.html" class="nav-item">
+        <div class="nav-icon">
+          <img src="bilder/Icon1.png" alt="Home">
+        </div>
+        <span>Home</span>
+      </a>
+
+      <a href="bestellung.html" class="nav-item active">
+        <div class="nav-icon">
+          <img src="bilder/Icon2.png" alt="Bestellung">
+        </div>
+        <span>Bestellung</span>
+      </a>
+
+      <a href="statistik.html" class="nav-item">
+        <div class="nav-icon">
+          <img src="bilder/Icon3.png" alt="Statistik">
+        </div>
+        <span>Statistik</span>
+      </a>
+
+      <a href="profil.html" class="nav-item">
+        <div class="nav-icon">
+          <img src="bilder/Icon4.png" alt="Profil">
+        </div>
+        <span>Profil</span>
+      </a>
+
+    </nav>
 
     <script src="js/bestellung.js"></script>
   </body>

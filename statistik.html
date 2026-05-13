@@ -13,118 +13,14 @@
   <body>
     <main class="dashboard-page">
 
-      <section class="dashboard-header">
-        <p class="welcome-text">
-          Statistik für <span id="kind1Name">Kind</span>
-        </p>
+      <div id="statisticsContainer"></div>
 
-        <h1>Verbrauch</h1>
-      </section>
-
-
-      <section class="chart-switch">
-        <button class="switch-btn active" data-child="lena" data-target="weeks">
-          6 Wochen
-        </button>
-
-        <button class="switch-btn" data-child="lena" data-target="days">
-          7 Tage
-        </button>
-      </section>
-
-
-      <section class="chart-card lena-chart chart-weeks active-chart">
-        <div class="chart-title">
-          <img src="bilder/Paket.png" alt="Icon">
-          <h2>Verbrauch letzte 6 Wochen</h2>
-        </div>
-
-        <div class="chart-wrapper">
-          <div class="y-axis" id="kind1WeeksAxis"></div>
-
-          <div class="chart-container">
-            <div class="chart-grid"></div>
-            <div class="bars weekly-bars" id="kind1Weeks"></div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="chart-card lena-chart chart-days">
-        <div class="chart-title">
-          <img src="bilder/Paket.png" alt="Icon">
-          <h2>Verbrauch letzte 7 Tage</h2>
-        </div>
-
-        <div class="chart-wrapper">
-          <div class="y-axis" id="kind1DaysAxis"></div>
-
-          <div class="chart-container">
-            <div class="chart-grid"></div>
-            <div class="bars" id="kind1Days"></div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="child-spacer"></section>
-
-
-      <section class="dashboard-header second-child-header" id="kind2Header">
-        <p class="welcome-text">
-          Statistik für <span id="kind2Name">Kind</span>
-        </p>
-
-        <h1>Verbrauch</h1>
-      </section>
-
-
-      <section class="chart-switch" id="kind2Switch">
-        <button class="switch-btn active" data-child="noah" data-target="weeks">
-          6 Wochen
-        </button>
-
-        <button class="switch-btn" data-child="noah" data-target="days">
-          7 Tage
-        </button>
-      </section>
-
-
-      <section class="chart-card noah-chart chart-weeks active-chart">
-        <div class="chart-title">
-          <img src="bilder/Paket.png" alt="Icon">
-          <h2>Verbrauch letzte 6 Wochen</h2>
-        </div>
-
-        <div class="chart-wrapper">
-          <div class="y-axis" id="kind2WeeksAxis"></div>
-
-          <div class="chart-container">
-            <div class="chart-grid"></div>
-            <div class="bars weekly-bars" id="kind2Weeks"></div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="chart-card noah-chart chart-days">
-        <div class="chart-title">
-          <img src="bilder/Paket.png" alt="Icon">
-          <h2>Verbrauch letzte 7 Tage</h2>
-        </div>
-
-        <div class="chart-wrapper">
-          <div class="y-axis" id="kind2DaysAxis"></div>
-
-          <div class="chart-container">
-            <div class="chart-grid"></div>
-            <div class="bars" id="kind2Days"></div>
-          </div>
-        </div>
+      <section class="empty-card" id="emptyState" style="display: none;">
+        <h2>Noch keine Kinder eingetragen</h2>
+        <p>Sobald Kinder in der Datenbank vorhanden sind, werden hier die Verbrauchsstatistiken angezeigt.</p>
       </section>
 
     </main>
-
 
     <nav class="bottom-nav">
 

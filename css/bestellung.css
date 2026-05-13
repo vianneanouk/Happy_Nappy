@@ -52,15 +52,26 @@ body {
 }
 
 .bestellung-header h1 {
-  color: white;
-
   margin-bottom: 10px;
+
+  color: white;
 }
 
-.tracking-text {
-  color: rgba(255,255,255,0.8);
 
-  font-size: 18px;
+/* =========================
+   ORDER SECTIONS
+========================= */
+
+#ordersContainer {
+  width: 100%;
+}
+
+.order-child {
+  margin-bottom: 70px;
+}
+
+.order-child:last-child {
+  margin-bottom: 0;
 }
 
 
@@ -82,52 +93,20 @@ body {
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.order-child:not(:first-child) .toggle-card {
+  margin-top: 0;
 }
 
 .toggle-card h3 {
   margin: 0;
-}
 
+  font-size: 21px;
+  line-height: 1.3;
 
-/* =========================
-   SWITCH
-========================= */
-
-.switch {
-  position: relative;
-
-  width: 56px;
-  height: 32px;
-}
-
-.switch input {
-  display: none;
-}
-
-.slider {
-  position: absolute;
-  inset: 0;
-
-  background: #b7a0dd;
-
-  border-radius: 30px;
-}
-
-.slider::before {
-  content: "";
-
-  position: absolute;
-
-  width: 24px;
-  height: 24px;
-
-  left: 28px;
-  top: 4px;
-
-  background: white;
-
-  border-radius: 50%;
+  color: var(--text-dark);
 }
 
 
@@ -136,21 +115,39 @@ body {
 ========================= */
 
 .status-card,
-.details-card {
+.details-card,
+.empty-card {
   width: calc(100% - 40px);
 
   margin: 0 auto 24px;
   padding: 30px 28px;
 
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.92);
 
   border-radius: 34px;
 
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 .details-card {
   background: rgba(246, 236, 239, 0.9);
+}
+
+.empty-card {
+  margin-top: -70px;
+}
+
+.empty-card h2 {
+  margin-bottom: 14px;
+
+  font-size: 26px;
+}
+
+.empty-card p {
+  font-size: 18px;
+  line-height: 1.4;
+
+  color: var(--text-light);
 }
 
 
@@ -168,6 +165,11 @@ body {
 
 .status-top h2 {
   margin-bottom: 8px;
+}
+
+.status-top p {
+  font-size: 20px;
+  color: var(--text-dark);
 }
 
 .status-icon {
@@ -192,24 +194,6 @@ body {
 
 
 /* =========================
-   DELIVERY INFO
-========================= */
-
-.delivery-info {
-  margin-bottom: 40px;
-
-  padding: 18px;
-
-  border: 2px solid #eadff5;
-  border-radius: 20px;
-
-  color: var(--text-light);
-
-  font-size: 16px;
-}
-
-
-/* =========================
    TIMELINE
 ========================= */
 
@@ -229,11 +213,11 @@ body {
   min-width: 22px;
   height: 22px;
 
+  margin-top: 5px;
+
   border-radius: 50%;
 
   background: #b7a0dd;
-
-  margin-top: 5px;
 }
 
 .timeline-circle.inactive {
@@ -251,6 +235,7 @@ body {
   margin: 0;
 
   font-size: 18px;
+  line-height: 1.4;
 }
 
 
@@ -262,15 +247,6 @@ body {
   margin-bottom: 28px;
 }
 
-.detail-item img {
-  width: 18px;
-  height: 18px;
-
-  object-fit: contain;
-
-  margin-top: 4px;
-}
-
 .detail-item {
   display: flex;
   align-items: flex-start;
@@ -279,14 +255,13 @@ body {
   margin-top: 24px;
 }
 
-.detail-icon {
-  width: 26px;
-  min-width: 26px;
+.detail-item img {
+  width: 18px;
+  height: 18px;
 
-  color: #9F83CF;
+  margin-top: 4px;
 
-  font-size: 22px;
-  line-height: 1.2;
+  object-fit: contain;
 }
 
 .detail-label {
@@ -378,8 +353,4 @@ body {
     #9F83CF 0%,
     #B7BEDC 100%
   );
-}
-
-.second-order {
-  margin-top: 60px;
 }

@@ -7,17 +7,37 @@ body {
 body {
   margin: 0 !important;
   max-width: none !important;
+
   width: 100vw;
   min-height: 100vh;
+
   background-color: #f6f4f3;
+
   font-family: var(--font-main);
 }
 
 .dashboard-page {
   width: 100%;
   max-width: 430px;
+
   margin: 0 auto;
   padding-bottom: 140px;
+}
+
+#statisticsContainer {
+  width: 100%;
+}
+
+.statistic-child {
+  margin-bottom: 70px;
+}
+
+.statistic-child:last-child {
+  margin-bottom: 0;
+}
+
+.statistic-child-spacing {
+  padding-top: 10px;
 }
 
 .dashboard-header {
@@ -33,30 +53,44 @@ body {
   border-bottom-right-radius: 40px;
 }
 
+.second-child-header {
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+}
+
 .welcome-text {
   margin-bottom: 12px;
+
   color: rgba(255, 255, 255, 0.9);
+
   font-size: 18px;
 }
 
 .dashboard-header h1 {
   color: white;
+
   font-size: 46px;
   line-height: 1.1;
 }
 
 .chart-switch {
   width: calc(100% - 40px);
+
   margin: -70px auto 24px;
   padding: 6px;
 
   background: rgba(255, 255, 255, 0.75);
+
   border-radius: 24px;
 
   display: flex;
   gap: 6px;
 
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.statistic-child:not(:first-child) .chart-switch {
+  margin-top: -70px;
 }
 
 .switch-btn {
@@ -90,10 +124,12 @@ body {
   display: none;
 
   width: calc(100% - 40px);
+
   margin: 0 auto 24px;
   padding: 30px 28px;
 
   background: rgba(255, 255, 255, 0.92);
+
   border-radius: 34px;
 
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -114,11 +150,13 @@ body {
 .chart-title img {
   width: 16px;
   height: 16px;
+
   object-fit: contain;
 }
 
 .chart-title h2 {
   margin: 0;
+
   font-size: 24px;
 }
 
@@ -148,6 +186,7 @@ body {
 
 .chart-container {
   position: relative;
+
   flex: 1;
   height: 260px;
 }
@@ -201,16 +240,34 @@ body {
 
 .bar-item span {
   font-size: 14px;
+
   color: var(--text-light);
 }
 
-.child-spacer {
-  height: 50px;
+.empty-card {
+  width: calc(100% - 40px);
+
+  margin: 60px auto 24px;
+  padding: 30px 28px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-radius: 34px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
-.second-child-header {
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
+.empty-card h2 {
+  margin-bottom: 14px;
+
+  font-size: 26px;
+}
+
+.empty-card p {
+  font-size: 18px;
+  line-height: 1.4;
+
+  color: var(--text-light);
 }
 
 .bottom-nav {
@@ -266,6 +323,7 @@ body {
 .nav-icon img {
   width: 25px;
   height: 25px;
+
   object-fit: contain;
 }
 
