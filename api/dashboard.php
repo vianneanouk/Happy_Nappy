@@ -25,12 +25,12 @@ try {
             k.windelgroesse,
 
             (
-                SELECT s.packung
+                SELECT s.distanz
                 FROM sensordaten s
                 WHERE s.kind_id = k.id
                 ORDER BY s.zeit DESC
                 LIMIT 1
-            ) AS aktueller_bestand,
+            ) AS aktuelle_distanz,
 
             (
                 SELECT COUNT(*)

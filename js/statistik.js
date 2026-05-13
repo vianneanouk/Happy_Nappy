@@ -27,12 +27,12 @@ async function loadStatistikData() {
 function fillChildStatistics(number, kind) {
   document.getElementById(`kind${number}Name`).textContent = kind.vorname;
 
-  fillWeekBars(`kind${number}Weeks`, kind.wochen);
-  fillDayBars(`kind${number}Days`, kind.tage);
+  fillWeekBars(`kind${number}Weeks`, `kind${number}WeeksAxis`, kind.wochen);
+  fillDayBars(`kind${number}Days`, `kind${number}DaysAxis`, kind.tage);
 }
 
 
-function fillWeekBars(containerId, weeks) {
+function fillWeekBars(containerId, axisId, weeks) {
   const container = document.getElementById(containerId);
 
   if (!container) return;
@@ -41,6 +41,8 @@ function fillWeekBars(containerId, weeks) {
 
   const filledWeeks = fillMissingWeeks(weeks);
   const maxValue = getMaxValue(filledWeeks);
+
+  fillYAxis(axisId, maxValue);
 
   filledWeeks.forEach((week) => {
     const height = calculateBarHeight(week.anzahl, maxValue);
@@ -54,7 +56,7 @@ function fillWeekBars(containerId, weeks) {
 }
 
 
-function fillDayBars(containerId, days) {
+function fillDayBars(containerId, axisId, days) {
   const container = document.getElementById(containerId);
 
   if (!container) return;
@@ -63,6 +65,8 @@ function fillDayBars(containerId, days) {
 
   const filledDays = fillMissingDays(days);
   const maxValue = getMaxValue(filledDays);
+
+  fillYAxis(axisId, maxValue);
 
   filledDays.forEach((day) => {
     const height = calculateBarHeight(day.anzahl, maxValue);
@@ -73,6 +77,28 @@ function fillDayBars(containerId, days) {
         <span>${day.label}</span>
       </div>
     `;
+  });
+}
+
+
+function fillYAxis(axisId, maxValue) {
+  const axis = document.getElementById(axisId);
+
+  if (!axis) return;
+
+  axis.innerHTML = "";
+
+  const step = Math.ceil(maxValue / 3);
+
+  const values = [
+    step * 3,
+    step * 2,
+    step,
+    0,
+  ];
+
+  values.forEach((value) => {
+    axis.innerHTML += `<span>${value}</span>`;
   });
 }
 
@@ -107,12 +133,48 @@ function fillMissingWeeks(weeks) {
     const weekDate = new Date();
     weekDate.setDate(weekDate.getDate() - i * 7);
 
+    const year = getIsoWeekYear(weekDate);
+    const week = getIsoWeekNumber(weekDate);
+    const weekKey = `${year}-${String(week).padStart(2, "0")}`;
+
+    const foundWeek = weeks.find((item) => item.woche === weekKey);
+
     result.push({
-      anzahl: weeks[i] ? Number(weeks[i].anzahl) : 0,
+      woche: weekKey,
+      anzahl: foundWeek ? Number(foundWeek.anzahl) : 0,
     });
   }
 
   return result;
+}
+
+
+function getIsoWeekNumber(date) {
+  const tempDate = new Date(date.getTime());
+
+  tempDate.setHours(0, 0, 0, 0);
+  tempDate.setDate(tempDate.getDate() + 3 - ((tempDate.getDay() + 6) % 7));
+
+  const week1 = new Date(tempDate.getFullYear(), 0, 4);
+
+  return (
+    1 +
+    Math.round(
+      ((tempDate.getTime() - week1.getTime()) / 86400000 -
+        3 +
+        ((week1.getDay() + 6) % 7)) /
+        7
+    )
+  );
+}
+
+
+function getIsoWeekYear(date) {
+  const tempDate = new Date(date.getTime());
+
+  tempDate.setDate(tempDate.getDate() + 3 - ((tempDate.getDay() + 6) % 7));
+
+  return tempDate.getFullYear();
 }
 
 
@@ -129,10 +191,10 @@ function getMaxValue(items) {
 
 function calculateBarHeight(value, maxValue) {
   if (!value || value === 0) {
-    return 6;
+    return 0;
   }
 
-  return Math.max((Number(value) / maxValue) * 85, 6);
+  return Math.max((Number(value) / maxValue) * 100, 4);
 }
 
 

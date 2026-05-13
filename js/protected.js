@@ -51,8 +51,8 @@ async function loadDashboardData() {
 
 
 function fillChildData(number, kind) {
-  const bestandPackungen = Number(kind.aktueller_bestand ?? 0);
-  const bestandWindeln = bestandPackungen * 28;
+  const distanz = Number(kind.aktuelle_distanz ?? 0);
+  const bestandWindeln = calculateDiapersFromDistance(distanz);
 
   const verbrauch = Number(kind.verbrauch_woche ?? 0);
 
@@ -72,6 +72,16 @@ function fillChildData(number, kind) {
   if (progress) {
     progress.style.width = calculateProgress(bestandWindeln) + "%";
   }
+}
+
+
+function calculateDiapersFromDistance(distanz) {
+  const regalHoehe = 200;
+  const windelnBeiVollemRegal = 28;
+
+  const windeln = (distanz / regalHoehe) * windelnBeiVollemRegal;
+
+  return Math.round(Math.min(Math.max(windeln, 0), windelnBeiVollemRegal));
 }
 
 
