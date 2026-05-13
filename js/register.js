@@ -1,14 +1,13 @@
-// register.js
-
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  const errorMessage = document.getElementById("error-message");
+  const mode = document.querySelector('select[name="mode"]').value;
+  const familien_id = document.querySelector('input[name="familien_id"]').value.trim();
 
-  /* Fehlermeldung zurücksetzen */
+  const errorMessage = document.getElementById("error-message");
   errorMessage.style.display = "none";
   errorMessage.textContent = "";
 
@@ -16,28 +15,26 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const response = await fetch("api/register.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({
+        email,
+        password,
+        mode,
+        familien_id
+      }),
     });
 
     const result = await response.json();
 
     if (result.status === "success") {
-
       window.location.href = "login.html";
-
     } else {
-
       errorMessage.style.display = "block";
-      errorMessage.textContent = "Diese Mailadresse ist bereits registriert";
-
+      errorMessage.textContent = result.message || "Fehler beim Registrieren";
     }
 
   } catch (error) {
-
-    console.error("Error:", error);
-
+    console.error(error);
     errorMessage.style.display = "block";
-    errorMessage.textContent = "Etwas ist schiefgelaufen";
-
+    errorMessage.textContent = "Serverfehler";
   }
 });

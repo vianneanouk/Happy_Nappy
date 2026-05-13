@@ -1,92 +1,100 @@
 <?php
-// register.php
 session_start();
 header('Content-Type: application/json');
-
 require_once '../system/config.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(["status" => "error", "message" => "Invalid request"]);
+    exit;
+}
 
-    $data = json_decode(file_get_contents("php://input"), true);
+$data = json_decode(file_get_contents("php://input"), true);
 
-    $email    = trim($data['email'] ?? '');
-    $password = trim($data['password'] ?? '');
+$email = trim($data['email'] ?? '');
+$password = trim($data['password'] ?? '');
+$mode = $data['mode'] ?? 'new';
+$familienID = $data['familien_id'] ?? null;
 
-    if (!$email || !$password) {
-        echo json_encode(["status" => "error", "message" => "Email and password are required"]);
-        exit;
-    }
+if (!$email || !$password) {
+    echo json_encode(["status" => "error", "message" => "Email und Passwort erforderlich"]);
+    exit;
+}
 
-    // Check if email already exists
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
-    $stmt->execute([':email' => $email]);
-    if ($stmt->fetch()) {
-        echo json_encode(["status" => "error", "message" => "Email is already in use"]);
-        exit;
-    }
+/* 1. Check ob User existiert */
+$stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
+$stmt->execute([':email' => $email]);
 
-    // Hash the password
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+if ($stmt->fetch()) {
+    echo json_encode(["status" => "error", "message" => "Email bereits vergeben"]);
+    exit;
+}
 
-    // Insert the new user
-    $insert = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :pass)");
-    $insert->execute([
-        ':email' => $email,
-        ':pass'  => $hashedPassword
-    ]);
+/* 2. Passwort hashen */
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Entscheidug: neue oder bestehende Familie
+/* 3. User erstellen */
+$isAdmin = ($mode === "new") ? 1 : 0;
 
-    $mode = $_POST['mode'] ?? 'new';
+$stmt = $pdo->prepare("
+    INSERT INTO users (email, password, is_admin)
+    VALUES (:email, :password, :is_admin)
+");
 
-    if ($mode === "new") {
+$stmt->execute([
+    ':email' => $email,
+    ':password' => $hashedPassword,
+    ':is_admin' => $isAdmin
+]);
+
+$userID = $pdo->lastInsertId();
+
+/* 4. Familie bestimmen */
+if ($mode === "new") {
 
     $stmt = $pdo->prepare("
-        INSERT INTO familie (familiennamen)
-        VALUES (:familiennamen)
+        INSERT INTO familie (familienname)
+        VALUES (:familienname)
     ");
 
     $stmt->execute([
-        ":familiennamen" => "Familie " . $userID
+        ':familienname' => 'Familie ' . $userID
     ]);
 
     $familienID = $pdo->lastInsertId();
 }
 
+/* 5. Join bestehende Familie */
 if ($mode === "join") {
 
-    $familienID = $_POST['familien_id'] ?? null;
-
     if (!$familienID) {
-        die("Keine Familien-ID angegeben");
+        echo json_encode(["status" => "error", "message" => "Keine Familien-ID angegeben"]);
+        exit;
     }
 
-    // Optional: prüfen ob Familie existiert
-    $stmt = $pdo->prepare("
-        SELECT id FROM familie WHERE id = :id
-    ");
-
-    $stmt->execute([
-        ":id" => $familienID
-    ]);
+    $stmt = $pdo->prepare("SELECT id FROM familie WHERE id = :id");
+    $stmt->execute([':id' => $familienID]);
 
     if (!$stmt->fetch()) {
-        die("Familie existiert nicht");
+        echo json_encode(["status" => "error", "message" => "Familie existiert nicht"]);
+        exit;
     }
 }
 
+/* 6. User mit Familie verbinden */
 $stmt = $pdo->prepare("
     UPDATE users
-    SET familien_id = :familienID
-    WHERE id = :userID
+    SET familien_id = :familien_id
+    WHERE id = :user_id
 ");
 
 $stmt->execute([
-    ":familienID" => $familienID,
-    ":userID" => $userID
+    ':familien_id' => $familienID,
+    ':user_id' => $userID
 ]);
 
-    echo json_encode(["status" => "success"]);
-} else {
-    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
-}
+echo json_encode([
+    "status" => "success",
+    "user_id" => $userID,
+    "familien_id" => $familienID,
+    "is_admin" => $isAdmin
+]);
