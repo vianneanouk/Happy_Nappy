@@ -57,6 +57,53 @@ body {
   margin-bottom: 10px;
 }
 
+/*INHALT*/
+
+.textfeld {
+    width: 15vw;      /* Breite */
+    height: 5hw;      /* Höhe */
+    font-size: 18px;   /* Schriftgrösse */
+    padding: 10px; 
+    border: none;
+    border-radius: 5px; 
+    margin-right: 5vw;
+}
+
+.kindVorname {
+    width: 15vw;      /* Breite */
+    height: 5hw;      /* Höhe */
+    font-size: 18px;   /* Schriftgrösse */
+    padding: 10px; 
+    border: none;
+    border-radius: 5px;
+}
+
+.kindGeburtsdatum {
+    width: 15vw;      /* Breite */
+    height: 5hw;      /* Höhe */
+    font-size: 18px;   /* Schriftgrösse */
+    padding: 10px; 
+    border: none;
+    border-radius: 5px;
+}
+
+.kindGewicht {
+    width: 15vw;      /* Breite */
+    height: 5hw;      /* Höhe */
+    font-size: 18px;   /* Schriftgrösse */
+    padding: 10px; 
+    border: none;
+    border-radius: 5px;
+}
+
+.kindWindelgroesse {
+    width: 15vw;      /* Breite */
+    height: 5hw;      /* Höhe */
+    font-size: 18px;   /* Schriftgrösse */
+    padding: 10px; 
+    border: none;
+    border-radius: 5px;
+}
 
 
 /* =========================

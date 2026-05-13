@@ -68,7 +68,7 @@ function createKindHTML(kind = {}) {
             >
 
             <div>
-                <label>Vorname</label>
+                <label><h4>Vorname</h4></label>
 
                 <input
                     type="text"
@@ -79,7 +79,7 @@ function createKindHTML(kind = {}) {
             </div>
 
             <div>
-                <label>Geburtsdatum</label>
+                <label><h4>Geburtsdatum</h4></label>
 
                 <input
                     type="date"
@@ -90,7 +90,7 @@ function createKindHTML(kind = {}) {
             </div>
 
             <div>
-                <label>Gewicht (kg)</label>
+                <label><h4>Gewicht (kg)</h4></label>
 
                 <input
                     type="number"
@@ -102,7 +102,7 @@ function createKindHTML(kind = {}) {
             </div>
 
             <div>
-                <label>Windelgrösse</label>
+                <label><h4>Windelgrösse</h4></label>
 
                 <select class="kindWindelgroesse">
 
