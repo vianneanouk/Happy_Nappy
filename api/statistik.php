@@ -13,6 +13,15 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
+function distanzZuWindeln($distanz) {
+    $regalHoehe = 200;
+    $windelnVollesRegal = 28;
+
+    $windeln = ($distanz / $regalHoehe) * $windelnVollesRegal;
+
+    return max(0, min($windeln, $windelnVollesRegal));
+}
+
 try {
     $stmt = $pdo->prepare("
         SELECT 
@@ -29,31 +38,69 @@ try {
     foreach ($kinder as &$kind) {
         $kindId = $kind["id"];
 
-        $stmtDays = $pdo->prepare("
+        $stmtSensor = $pdo->prepare("
             SELECT 
-                DATE(zeit) AS datum,
-                COUNT(*) AS anzahl
+                distanz,
+                zeit
             FROM sensordaten
             WHERE kind_id = ?
-            AND zeit >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
-            GROUP BY DATE(zeit)
-            ORDER BY datum ASC
+            AND zeit >= DATE_SUB(NOW(), INTERVAL 6 WEEK)
+            ORDER BY zeit ASC
         ");
-        $stmtDays->execute([$kindId]);
-        $kind["tage"] = $stmtDays->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmtWeeks = $pdo->prepare("
-            SELECT 
-                YEARWEEK(zeit, 1) AS woche,
-                COUNT(*) AS anzahl
-            FROM sensordaten
-            WHERE kind_id = ?
-            AND zeit >= DATE_SUB(CURDATE(), INTERVAL 6 WEEK)
-            GROUP BY YEARWEEK(zeit, 1)
-            ORDER BY woche ASC
-        ");
-        $stmtWeeks->execute([$kindId]);
-        $kind["wochen"] = $stmtWeeks->fetchAll(PDO::FETCH_ASSOC);
+        $stmtSensor->execute([$kindId]);
+        $messungen = $stmtSensor->fetchAll(PDO::FETCH_ASSOC);
+
+        $tage = [];
+        $wochen = [];
+
+        $letzterBestand = null;
+
+        foreach ($messungen as $messung) {
+            $aktuellerBestand = distanzZuWindeln((float)$messung["distanz"]);
+
+            if ($letzterBestand !== null) {
+                $verbrauch = $letzterBestand - $aktuellerBestand;
+
+                if ($verbrauch > 0) {
+                    $verbrauch = round($verbrauch);
+
+                    $datum = date("Y-m-d", strtotime($messung["zeit"]));
+                    $woche = date("o-W", strtotime($messung["zeit"]));
+
+                    if (!isset($tage[$datum])) {
+                        $tage[$datum] = 0;
+                    }
+
+                    if (!isset($wochen[$woche])) {
+                        $wochen[$woche] = 0;
+                    }
+
+                    $tage[$datum] += $verbrauch;
+                    $wochen[$woche] += $verbrauch;
+                }
+            }
+
+            $letzterBestand = $aktuellerBestand;
+        }
+
+        $kind["tage"] = [];
+
+        foreach ($tage as $datum => $anzahl) {
+            $kind["tage"][] = [
+                "datum" => $datum,
+                "anzahl" => $anzahl
+            ];
+        }
+
+        $kind["wochen"] = [];
+
+        foreach ($wochen as $woche => $anzahl) {
+            $kind["wochen"][] = [
+                "woche" => $woche,
+                "anzahl" => $anzahl
+            ];
+        }
     }
 
     echo json_encode([
