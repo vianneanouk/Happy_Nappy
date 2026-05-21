@@ -16,6 +16,23 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
+function getWindelgroesseVonRFID($rfid) {
+    $rfid = trim((string)$rfid);
+
+    $mapping = [
+        "04:93:f9:30:21:02:89" => 1,
+        "04:f3:e5:29:21:02:89" => 2,
+        "04:23:29:2f:21:02:89" => 3,
+        "6d:d8:03:21" => 4
+    ];
+
+    return $mapping[$rfid] ?? null;
+}
+
+function istNeuePackung($packung) {
+    return getWindelgroesseVonRFID($packung) !== null;
+}
+
 function distanzZuWindeln($distanz) {
     $regalHoehe = 200;
     $windelnVollesRegal = 28;
@@ -30,9 +47,7 @@ function distanzZuWindeln($distanz) {
 }
 
 function berechneBestand($messung) {
-    $packung = isset($messung["packung"]) ? (int)$messung["packung"] : 0;
-
-    if ($packung === 1) {
+    if (istNeuePackung($messung["packung"] ?? null)) {
         return 28;
     }
 
@@ -97,6 +112,7 @@ try {
         }
 
         $kind["tage"] = [];
+
         foreach ($tage as $datum => $anzahl) {
             $kind["tage"][] = [
                 "datum" => $datum,
@@ -105,6 +121,7 @@ try {
         }
 
         $kind["wochen"] = [];
+
         foreach ($wochen as $woche => $anzahl) {
             $kind["wochen"][] = [
                 "woche" => $woche,
