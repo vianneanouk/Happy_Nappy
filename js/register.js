@@ -70,3 +70,26 @@ const familienname = familiennameInput
     errorMessage.textContent = "Serverfehler";
   }
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  const familienId = params.get("familien_id");
+
+  if (familienId) {
+
+    // Modus automatisch auf "join"
+    modeSelect.value = "join";
+
+    familiennameContainer.style.display = "none";
+    familienIDContainer.style.display = "block";
+
+    // Feld automatisch ausfüllen
+    const input = document.getElementById("familien_id");
+
+    if (input) {
+      input.value = familienId;
+      input.readOnly = true;
+    }
+  }
+});
