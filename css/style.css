@@ -38,6 +38,28 @@
   --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
+/* =========================
+   INPUTS
+========================= */
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  height: 72px;
+
+  padding: 0 24px;
+
+  border: none;
+  border-radius: 22px;
+
+  background-color: rgba(255, 255, 255, 0.7);
+
+  font-family: var(--font-main);
+  font-size: 18px;
+
+  box-shadow: none;
+}
+
 
 /* =========================
    RESET
@@ -127,7 +149,7 @@ label {
 
 input[type="email"],
 input[type="password"] {
-  width: 20vw;
+  width: 100%;
   padding: 10px 14px;
 
   border: none;
@@ -145,6 +167,7 @@ input[type="password"] {
 /* =========================
    BUTTON
 ========================= */
+
 
 button {
   padding: 12px 20px;

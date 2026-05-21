@@ -34,16 +34,26 @@
 
         <p id="error-message" class="error-message"></p>
 
-        <button type="submit">Registrieren</button>
+        <button class="register_button" type="submit">Registrieren</button>
 
       </form>
+<div>
+  <label>Familie</label>
 
-      <select name="mode">
-  <option value="new">Neue Familie erstellen</option>
-  <option value="join">Bestehender Familie beitreten</option>
-</select>
+  <select name="mode">
+    <option value="new">Neue Familie erstellen</option>
+    <option value="join">Bestehender Familie beitreten</option>
+  </select>
+</div>
 
-<input name="familien_id" placeholder="Familien-ID">
+<div>
+  <label>Familien-ID</label>
+
+  <input
+    name="familien_id"
+    placeholder="Familien-ID"
+  >
+</div>
 
       <p class="register-text">
         Hast du bereits ein Konto?
