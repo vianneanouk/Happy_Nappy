@@ -127,7 +127,7 @@ label {
 
 input[type="email"],
 input[type="password"] {
-  width: 200px;
+  width: 20vw;
   padding: 10px 14px;
 
   border: none;
