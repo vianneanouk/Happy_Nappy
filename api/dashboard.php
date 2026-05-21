@@ -34,25 +34,62 @@ function istNeuePackung($packung) {
 }
 
 function berechneWindelnAusDistanz($distanz) {
-    $regalHoehe = 200;
-    $windelnBeiVollemRegal = 28;
+    $minDistanz = 30;
+    $maxDistanz = 200;
+
+    $bestandBeiMinDistanz = 18;
+    $bestandBeiMaxDistanz = 10;
 
     if ($distanz === null || $distanz === "") {
         return null;
     }
 
-    $windeln = (($regalHoehe - (float)$distanz) / $regalHoehe) * $windelnBeiVollemRegal;
-    $windeln = round($windeln);
+    $distanz = (float)$distanz;
 
-    return max(0, min($windeln, $windelnBeiVollemRegal));
+    if ($distanz <= $minDistanz) {
+        return $bestandBeiMinDistanz;
+    }
+
+    if ($distanz >= $maxDistanz) {
+        return $bestandBeiMaxDistanz;
+    }
+
+    $anteil = ($maxDistanz - $distanz) / ($maxDistanz - $minDistanz);
+    $windeln = $bestandBeiMaxDistanz + ($anteil * ($bestandBeiMinDistanz - $bestandBeiMaxDistanz));
+
+    return round(max($bestandBeiMaxDistanz, min($windeln, $bestandBeiMinDistanz)));
 }
 
 function berechneBestand($messung) {
-    if (istNeuePackung($messung["packung"] ?? null)) {
-        return 28;
+    $distanz = $messung["distanz"] ?? null;
+    $packung = $messung["packung"] ?? null;
+
+    if (istNeuePackung($packung) && (float)$distanz === 0.0) {
+        return 18;
     }
 
-    return berechneWindelnAusDistanz($messung["distanz"] ?? null);
+    return berechneWindelnAusDistanz($distanz);
+}
+
+function holeLetzteRFIDGroesse($pdo, $geraetCode) {
+    if ($geraetCode === null || trim($geraetCode) === "") {
+        return null;
+    }
+
+    $stmt = $pdo->prepare("
+        SELECT packung
+        FROM sensordaten
+        WHERE geraet_code = ?
+          AND packung IS NOT NULL
+          AND packung != ''
+        ORDER BY zeit DESC
+        LIMIT 1
+    ");
+
+    $stmt->execute([$geraetCode]);
+    $messung = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return getWindelgroesseVonRFID($messung["packung"] ?? null);
 }
 
 function berechneVerbrauchWoche($pdo, $geraetCode) {
@@ -129,6 +166,7 @@ try {
         FROM users
         WHERE id = ?
     ");
+
     $stmtUser->execute([$userId]);
     $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
@@ -149,6 +187,7 @@ try {
         WHERE familien_id = ?
         ORDER BY id ASC
     ");
+
     $stmtKinder->execute([$familienId]);
     $kinder = $stmtKinder->fetchAll(PDO::FETCH_ASSOC);
 
@@ -156,7 +195,6 @@ try {
 
     foreach ($kinder as $kind) {
         $geraetCode = $kind["geraet_code"] ?? null;
-
         $letzteMessung = null;
 
         if ($geraetCode !== null && trim($geraetCode) !== "") {
@@ -174,8 +212,8 @@ try {
 
         $aktuelleDistanz = $letzteMessung["distanz"] ?? null;
         $letztePackung = $letzteMessung["packung"] ?? null;
-        $erkannteWindelgroesse = getWindelgroesseVonRFID($letztePackung);
-
+        $istEinchecken = istNeuePackung($letztePackung) && (float)($aktuelleDistanz ?? -1) === 0.0;
+        $letzteRFIDWindelgroesse = holeLetzteRFIDGroesse($pdo, $geraetCode);
         $verbrauchWoche = berechneVerbrauchWoche($pdo, $geraetCode);
 
         $resultKinder[] = [
@@ -183,10 +221,11 @@ try {
             "vorname" => $kind["vorname"],
             "geburtsdatum" => $kind["geburtsdatum"],
             "gewicht" => $kind["gewicht"],
-            "windelgroesse" => $erkannteWindelgroesse ?? $kind["windelgroesse"],
+            "windelgroesse" => $letzteRFIDWindelgroesse ?? $kind["windelgroesse"],
+            "letzte_rfid_windelgroesse" => $letzteRFIDWindelgroesse,
             "geraet_code" => $geraetCode,
             "aktuelle_distanz" => $aktuelleDistanz,
-            "letzte_packung" => istNeuePackung($letztePackung) ? 1 : 0,
+            "letzte_packung" => $istEinchecken ? 1 : 0,
             "rfid_code" => $letztePackung,
             "verbrauch_woche" => $verbrauchWoche
         ];

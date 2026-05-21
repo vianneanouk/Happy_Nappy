@@ -55,14 +55,40 @@ async function loadDashboardData() {
 
 
 function createChildDashboard(kind) {
+  const hatGeraet =
+    typeof kind.geraet_code === "string" &&
+    kind.geraet_code.trim() !== "";
+
   const letztePackung = Number(kind.letzte_packung ?? 0);
+
+  const hatMessdaten =
+    kind.aktuelle_distanz !== null ||
+    letztePackung === 1;
+
   const distanz = Number(kind.aktuelle_distanz ?? 200);
 
-  const bestandWindeln = calculateCurrentDiaperStock(letztePackung, distanz);
-  const verbrauchWoche = Number(kind.verbrauch_woche ?? 0);
+  const bestandWindeln =
+    hatGeraet && hatMessdaten
+      ? calculateCurrentDiaperStock(letztePackung, distanz)
+      : 0;
+
+  const verbrauchWoche =
+    hatGeraet && hatMessdaten
+      ? Number(kind.verbrauch_woche ?? 0)
+      : 0;
+
   const verbleibendeTage = calculateDaysLeft(bestandWindeln);
   const progress = calculateProgress(bestandWindeln);
-  const bestellung = getOrderStatus(bestandWindeln);
+
+  const bestellung = getOrderStatus(
+    bestandWindeln,
+    hatGeraet && hatMessdaten
+  );
+
+  const windelgroesseText =
+    hatGeraet && hatMessdaten
+      ? getWindelgroesseText(kind.letzte_rfid_windelgroesse)
+      : "Kein Gerät verbunden";
 
   const wrapper = document.createElement("div");
   wrapper.classList.add("child-dashboard");
@@ -76,6 +102,10 @@ function createChildDashboard(kind) {
       </div>
 
       <p class="stock-text">Windeln verfügbar</p>
+
+      <p class="stock-text">
+        ${windelgroesseText}
+      </p>
 
       <p class="stock-text">
         reicht noch für ${verbleibendeTage} Tage
@@ -111,9 +141,18 @@ function createChildDashboard(kind) {
 }
 
 
+function getWindelgroesseText(windelgroesse) {
+  if (windelgroesse === null || windelgroesse === undefined || windelgroesse === "") {
+    return "Windelgrösse noch nicht erkannt";
+  }
+
+  return `Windelgrösse ${windelgroesse}`;
+}
+
+
 function calculateCurrentDiaperStock(letztePackung, distanz) {
   if (letztePackung === 1) {
-    return 28;
+    return 18;
   }
 
   return calculateDiapersFromDistance(distanz);
@@ -121,18 +160,42 @@ function calculateCurrentDiaperStock(letztePackung, distanz) {
 
 
 function calculateDiapersFromDistance(distanz) {
-  const regalHoehe = 200;
-  const windelnBeiVollemRegal = 28;
+  const minDistanz = 30;
+  const maxDistanz = 200;
+
+  const bestandBeiMinDistanz = 18;
+  const bestandBeiMaxDistanz = 10;
+
+  if (Number.isNaN(distanz)) {
+    return bestandBeiMaxDistanz;
+  }
+
+  if (distanz <= minDistanz) {
+    return bestandBeiMinDistanz;
+  }
+
+  if (distanz >= maxDistanz) {
+    return bestandBeiMaxDistanz;
+  }
+
+  const anteil =
+    (maxDistanz - distanz) / (maxDistanz - minDistanz);
 
   const windeln =
-    ((regalHoehe - distanz) / regalHoehe) * windelnBeiVollemRegal;
+    bestandBeiMaxDistanz +
+    anteil * (bestandBeiMinDistanz - bestandBeiMaxDistanz);
 
-  return Math.round(Math.min(Math.max(windeln, 0), windelnBeiVollemRegal));
+  return Math.round(
+    Math.min(
+      Math.max(windeln, bestandBeiMaxDistanz),
+      bestandBeiMinDistanz
+    )
+  );
 }
 
 
 function calculateDaysLeft(bestandWindeln) {
-  const windelnProPackung = 28;
+  const windelnProPackung = 18;
   const tageProPackung = 7;
 
   return Math.round((bestandWindeln / windelnProPackung) * tageProPackung);
@@ -140,17 +203,24 @@ function calculateDaysLeft(bestandWindeln) {
 
 
 function calculateProgress(bestandWindeln) {
-  const maxBestand = 28;
+  const maxBestand = 18;
   const progress = (bestandWindeln / maxBestand) * 100;
 
   return Math.min(progress, 100);
 }
 
 
-function getOrderStatus(bestandWindeln) {
-  if (bestandWindeln < 14) {
+function getOrderStatus(bestandWindeln, sensorAktiv = true) {
+  if (!sensorAktiv) {
     return {
-      statusText: "28 Windeln unterwegs",
+      statusText: "Gerade keine Bestellung am Laufen",
+      datum: "keine Lieferung geplant",
+    };
+  }
+
+  if (bestandWindeln <= 11) {
+    return {
+      statusText: "18 Windeln unterwegs",
       datum: getDeliveryDate(),
     };
   }

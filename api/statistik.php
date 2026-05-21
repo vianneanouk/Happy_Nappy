@@ -34,24 +34,41 @@ function istNeuePackung($packung) {
 }
 
 function distanzZuWindeln($distanz) {
-    $regalHoehe = 200;
-    $windelnVollesRegal = 28;
+    $minDistanz = 30;
+    $maxDistanz = 200;
+
+    $bestandBeiMinDistanz = 18;
+    $bestandBeiMaxDistanz = 10;
 
     if ($distanz === null || $distanz === "") {
         return null;
     }
 
-    $windeln = (($regalHoehe - (float)$distanz) / $regalHoehe) * $windelnVollesRegal;
+    $distanz = (float)$distanz;
 
-    return round(max(0, min($windeln, $windelnVollesRegal)));
+    if ($distanz <= $minDistanz) {
+        return $bestandBeiMinDistanz;
+    }
+
+    if ($distanz >= $maxDistanz) {
+        return $bestandBeiMaxDistanz;
+    }
+
+    $anteil = ($maxDistanz - $distanz) / ($maxDistanz - $minDistanz);
+    $windeln = $bestandBeiMaxDistanz + ($anteil * ($bestandBeiMinDistanz - $bestandBeiMaxDistanz));
+
+    return round(max($bestandBeiMaxDistanz, min($windeln, $bestandBeiMinDistanz)));
 }
 
 function berechneBestand($messung) {
-    if (istNeuePackung($messung["packung"] ?? null)) {
-        return 28;
+    $distanz = $messung["distanz"] ?? null;
+    $packung = $messung["packung"] ?? null;
+
+    if (istNeuePackung($packung) && (float)$distanz === 0.0) {
+        return 18;
     }
 
-    return distanzZuWindeln($messung["distanz"] ?? null);
+    return distanzZuWindeln($distanz);
 }
 
 try {
@@ -71,7 +88,6 @@ try {
 
     foreach ($kinder as &$kind) {
         $geraetCode = $kind["geraet_code"] ?? null;
-
         $messungen = [];
 
         if ($geraetCode !== null && trim($geraetCode) !== "") {

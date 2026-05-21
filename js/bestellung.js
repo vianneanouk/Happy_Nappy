@@ -30,9 +30,27 @@ async function loadBestellungData() {
 
 
 function createOrderElement(kind) {
+  const hatGeraet =
+    typeof kind.geraet_code === "string" &&
+    kind.geraet_code.trim() !== "";
+
+  const letztePackung = Number(kind.letzte_packung ?? 0);
+
+  const hatMessdaten =
+    kind.aktuelle_distanz !== null ||
+    letztePackung === 1;
+
   const distanz = Number(kind.aktuelle_distanz ?? 200);
-  const bestandWindeln = calculateDiapersFromDistance(distanz);
-  const bestellung = getOrderStatus(bestandWindeln);
+
+  const bestandWindeln =
+    hatGeraet && hatMessdaten
+      ? calculateCurrentDiaperStock(letztePackung, distanz)
+      : 0;
+
+  const bestellung = getOrderStatus(
+    bestandWindeln,
+    hatGeraet && hatMessdaten
+  );
 
   const wrapper = document.createElement("div");
   wrapper.classList.add("order-child");
@@ -56,7 +74,7 @@ function createOrderElement(kind) {
 
       <div class="timeline">
         <div class="timeline-item active">
-          <div class="timeline-circle"></div>
+          <div class="timeline-circle ${bestellung.isActive ? "" : "inactive"}"></div>
 
           <div>
             <h4>Bestellung</h4>
@@ -102,26 +120,70 @@ function createOrderElement(kind) {
 }
 
 
-function calculateDiapersFromDistance(distanz) {
-  const regalHoehe = 200;
-  const windelnBeiVollemRegal = 28;
+function calculateCurrentDiaperStock(letztePackung, distanz) {
+  if (letztePackung === 1) {
+    return 18;
+  }
 
-  const windeln =
-    ((regalHoehe - distanz) / regalHoehe) * windelnBeiVollemRegal;
-
-  return Math.round(Math.min(Math.max(windeln, 0), windelnBeiVollemRegal));
+  return calculateDiapersFromDistance(distanz);
 }
 
 
-function getOrderStatus(bestandWindeln) {
-  if (bestandWindeln < 14) {
+function calculateDiapersFromDistance(distanz) {
+  const minDistanz = 30;
+  const maxDistanz = 200;
+
+  const bestandBeiMinDistanz = 18;
+  const bestandBeiMaxDistanz = 10;
+
+  if (Number.isNaN(distanz)) {
+    return bestandBeiMaxDistanz;
+  }
+
+  if (distanz <= minDistanz) {
+    return bestandBeiMinDistanz;
+  }
+
+  if (distanz >= maxDistanz) {
+    return bestandBeiMaxDistanz;
+  }
+
+  const anteil =
+    (maxDistanz - distanz) / (maxDistanz - minDistanz);
+
+  const windeln =
+    bestandBeiMaxDistanz +
+    anteil * (bestandBeiMinDistanz - bestandBeiMaxDistanz);
+
+  return Math.round(
+    Math.min(
+      Math.max(windeln, bestandBeiMaxDistanz),
+      bestandBeiMinDistanz
+    )
+  );
+}
+
+
+function getOrderStatus(bestandWindeln, sensorAktiv = true) {
+  if (!sensorAktiv) {
+    return {
+      isActive: false,
+      status: "Keine Bestellung",
+      bestelltAm: "kein Gerät verbunden",
+      packageText: "Aktuell kein Paket unterwegs",
+      datum: "keine Lieferung geplant",
+      timelineText: "keine Lieferung geplant",
+    };
+  }
+
+  if (bestandWindeln <= 11) {
     const lieferdatum = getDeliveryDate();
 
     return {
       isActive: true,
       status: "Unterwegs",
       bestelltAm: "heute automatisch ausgelöst",
-      packageText: "Windeln, 28 Stück",
+      packageText: "Windeln, 18 Stück",
       datum: lieferdatum,
       timelineText: `voraussichtlich ${lieferdatum}`,
     };
