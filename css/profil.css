@@ -60,8 +60,6 @@ body {
 }
 
 
-
-
 /* =========================
    FORM CARD
 ========================= */
@@ -117,7 +115,8 @@ h4 {
 .kindVorname,
 .kindGeburtsdatum,
 .kindGewicht,
-.kindWindelgroesse {
+.kindWindelgroesse,
+.kindGeraetCode {
   width: 100%;
   min-width: 0;
 
@@ -140,7 +139,8 @@ h4 {
 .kindVorname:focus,
 .kindGeburtsdatum:focus,
 .kindGewicht:focus,
-.kindWindelgroesse:focus {
+.kindWindelgroesse:focus,
+.kindGeraetCode:focus {
   outline: none;
 
   background: #ececec;
@@ -163,7 +163,7 @@ h4 {
   gap: 20px;
 }
 
-#kinderContainer > div {
+.kind-block {
   padding: 22px;
 
   background: #fafafa;
@@ -171,6 +171,13 @@ h4 {
   border-radius: 24px;
 
   border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.kind-block hr {
+  margin-top: 24px;
+
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 
@@ -222,6 +229,16 @@ button[type="submit"] {
   color: white;
 
   box-shadow: 0 10px 24px rgba(159, 131, 207, 0.25);
+}
+
+.removeKindBtn {
+  width: 100%;
+
+  margin-top: 22px;
+
+  background: rgba(0, 0, 0, 0.06);
+
+  color: #666;
 }
 
 
@@ -464,4 +481,3 @@ tbody tr:not(:last-child) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-

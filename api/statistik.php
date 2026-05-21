@@ -58,7 +58,8 @@ try {
     $stmt = $pdo->prepare("
         SELECT 
             k.id,
-            k.vorname
+            k.vorname,
+            k.geraet_code
         FROM kinder k
         INNER JOIN users u ON u.familien_id = k.familien_id
         WHERE u.id = ?
@@ -69,21 +70,25 @@ try {
     $kinder = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($kinder as &$kind) {
-        $kindId = $kind["id"];
+        $geraetCode = $kind["geraet_code"] ?? null;
 
-        $stmtSensor = $pdo->prepare("
-            SELECT 
-                distanz,
-                packung,
-                zeit
-            FROM sensordaten
-            WHERE kind_id = ?
-              AND zeit >= DATE_SUB(NOW(), INTERVAL 6 WEEK)
-            ORDER BY zeit ASC
-        ");
+        $messungen = [];
 
-        $stmtSensor->execute([$kindId]);
-        $messungen = $stmtSensor->fetchAll(PDO::FETCH_ASSOC);
+        if ($geraetCode !== null && trim($geraetCode) !== "") {
+            $stmtSensor = $pdo->prepare("
+                SELECT 
+                    distanz,
+                    packung,
+                    zeit
+                FROM sensordaten
+                WHERE geraet_code = ?
+                  AND zeit >= DATE_SUB(NOW(), INTERVAL 6 WEEK)
+                ORDER BY zeit ASC
+            ");
+
+            $stmtSensor->execute([$geraetCode]);
+            $messungen = $stmtSensor->fetchAll(PDO::FETCH_ASSOC);
+        }
 
         $tage = [];
         $wochen = [];

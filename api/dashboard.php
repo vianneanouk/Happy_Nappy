@@ -55,30 +55,34 @@ function berechneBestand($messung) {
     return berechneWindelnAusDistanz($messung["distanz"] ?? null);
 }
 
-function berechneVerbrauchWoche($pdo, $kindId) {
+function berechneVerbrauchWoche($pdo, $geraetCode) {
+    if ($geraetCode === null || trim($geraetCode) === "") {
+        return 0;
+    }
+
     $startZeit = date("Y-m-d H:i:s", strtotime("-7 days"));
 
     $stmtVorher = $pdo->prepare("
         SELECT distanz, packung, zeit
         FROM sensordaten
-        WHERE kind_id = ?
+        WHERE geraet_code = ?
           AND zeit < ?
         ORDER BY zeit DESC
         LIMIT 1
     ");
 
-    $stmtVorher->execute([$kindId, $startZeit]);
+    $stmtVorher->execute([$geraetCode, $startZeit]);
     $vorherigeMessung = $stmtVorher->fetch(PDO::FETCH_ASSOC);
 
     $stmtWoche = $pdo->prepare("
         SELECT distanz, packung, zeit
         FROM sensordaten
-        WHERE kind_id = ?
+        WHERE geraet_code = ?
           AND zeit >= ?
         ORDER BY zeit ASC
     ");
 
-    $stmtWoche->execute([$kindId, $startZeit]);
+    $stmtWoche->execute([$geraetCode, $startZeit]);
     $messungenWoche = $stmtWoche->fetchAll(PDO::FETCH_ASSOC);
 
     $messungen = [];
@@ -140,7 +144,7 @@ try {
     $familienId = $user["familien_id"];
 
     $stmtKinder = $pdo->prepare("
-        SELECT id, vorname, geburtsdatum, gewicht, windelgroesse
+        SELECT id, vorname, geburtsdatum, gewicht, windelgroesse, geraet_code
         FROM kinder
         WHERE familien_id = ?
         ORDER BY id ASC
@@ -151,24 +155,28 @@ try {
     $resultKinder = [];
 
     foreach ($kinder as $kind) {
-        $kindId = $kind["id"];
+        $geraetCode = $kind["geraet_code"] ?? null;
 
-        $stmtLetzteMessung = $pdo->prepare("
-            SELECT distanz, packung, zeit
-            FROM sensordaten
-            WHERE kind_id = ?
-            ORDER BY zeit DESC
-            LIMIT 1
-        ");
+        $letzteMessung = null;
 
-        $stmtLetzteMessung->execute([$kindId]);
-        $letzteMessung = $stmtLetzteMessung->fetch(PDO::FETCH_ASSOC);
+        if ($geraetCode !== null && trim($geraetCode) !== "") {
+            $stmtLetzteMessung = $pdo->prepare("
+                SELECT distanz, packung, zeit
+                FROM sensordaten
+                WHERE geraet_code = ?
+                ORDER BY zeit DESC
+                LIMIT 1
+            ");
+
+            $stmtLetzteMessung->execute([$geraetCode]);
+            $letzteMessung = $stmtLetzteMessung->fetch(PDO::FETCH_ASSOC);
+        }
 
         $aktuelleDistanz = $letzteMessung["distanz"] ?? null;
         $letztePackung = $letzteMessung["packung"] ?? null;
         $erkannteWindelgroesse = getWindelgroesseVonRFID($letztePackung);
 
-        $verbrauchWoche = berechneVerbrauchWoche($pdo, $kindId);
+        $verbrauchWoche = berechneVerbrauchWoche($pdo, $geraetCode);
 
         $resultKinder[] = [
             "id" => $kind["id"],
@@ -176,6 +184,7 @@ try {
             "geburtsdatum" => $kind["geburtsdatum"],
             "gewicht" => $kind["gewicht"],
             "windelgroesse" => $erkannteWindelgroesse ?? $kind["windelgroesse"],
+            "geraet_code" => $geraetCode,
             "aktuelle_distanz" => $aktuelleDistanz,
             "letzte_packung" => istNeuePackung($letztePackung) ? 1 : 0,
             "rfid_code" => $letztePackung,
