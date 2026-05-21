@@ -55,8 +55,10 @@ async function loadDashboardData() {
 
 
 function createChildDashboard(kind) {
+  const letztePackung = Number(kind.letzte_packung ?? 0);
   const distanz = Number(kind.aktuelle_distanz ?? 200);
-  const bestandWindeln = calculateDiapersFromDistance(distanz);
+
+  const bestandWindeln = calculateCurrentDiaperStock(letztePackung, distanz);
   const verbrauchWoche = Number(kind.verbrauch_woche ?? 0);
   const verbleibendeTage = calculateDaysLeft(bestandWindeln);
   const progress = calculateProgress(bestandWindeln);
@@ -106,6 +108,15 @@ function createChildDashboard(kind) {
   `;
 
   return wrapper;
+}
+
+
+function calculateCurrentDiaperStock(letztePackung, distanz) {
+  if (letztePackung === 1) {
+    return 28;
+  }
+
+  return calculateDiapersFromDistance(distanz);
 }
 
 

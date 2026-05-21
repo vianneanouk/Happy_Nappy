@@ -20,9 +20,23 @@ function distanzZuWindeln($distanz) {
     $regalHoehe = 200;
     $windelnVollesRegal = 28;
 
-    $windeln = (($regalHoehe - $distanz) / $regalHoehe) * $windelnVollesRegal;
+    if ($distanz === null || $distanz === "") {
+        return null;
+    }
+
+    $windeln = (($regalHoehe - (float)$distanz) / $regalHoehe) * $windelnVollesRegal;
 
     return round(max(0, min($windeln, $windelnVollesRegal)));
+}
+
+function berechneBestand($messung) {
+    $packung = isset($messung["packung"]) ? (int)$messung["packung"] : 0;
+
+    if ($packung === 1) {
+        return 28;
+    }
+
+    return distanzZuWindeln($messung["distanz"] ?? null);
 }
 
 try {
@@ -45,10 +59,11 @@ try {
         $stmtSensor = $pdo->prepare("
             SELECT 
                 distanz,
+                packung,
                 zeit
             FROM sensordaten
             WHERE kind_id = ?
-            AND zeit >= DATE_SUB(NOW(), INTERVAL 6 WEEK)
+              AND zeit >= DATE_SUB(NOW(), INTERVAL 6 WEEK)
             ORDER BY zeit ASC
         ");
 
@@ -57,11 +72,14 @@ try {
 
         $tage = [];
         $wochen = [];
-
         $letzterBestand = null;
 
         foreach ($messungen as $messung) {
-            $aktuellerBestand = distanzZuWindeln((float)$messung["distanz"]);
+            $aktuellerBestand = berechneBestand($messung);
+
+            if ($aktuellerBestand === null) {
+                continue;
+            }
 
             if ($letzterBestand !== null) {
                 $verbrauch = $letzterBestand - $aktuellerBestand;
@@ -70,16 +88,8 @@ try {
                     $datum = date("Y-m-d", strtotime($messung["zeit"]));
                     $woche = date("o-W", strtotime($messung["zeit"]));
 
-                    if (!isset($tage[$datum])) {
-                        $tage[$datum] = 0;
-                    }
-
-                    if (!isset($wochen[$woche])) {
-                        $wochen[$woche] = 0;
-                    }
-
-                    $tage[$datum] += $verbrauch;
-                    $wochen[$woche] += $verbrauch;
+                    $tage[$datum] = ($tage[$datum] ?? 0) + $verbrauch;
+                    $wochen[$woche] = ($wochen[$woche] ?? 0) + $verbrauch;
                 }
             }
 
@@ -87,7 +97,6 @@ try {
         }
 
         $kind["tage"] = [];
-
         foreach ($tage as $datum => $anzahl) {
             $kind["tage"][] = [
                 "datum" => $datum,
@@ -96,7 +105,6 @@ try {
         }
 
         $kind["wochen"] = [];
-
         foreach ($wochen as $woche => $anzahl) {
             $kind["wochen"][] = [
                 "woche" => $woche,
