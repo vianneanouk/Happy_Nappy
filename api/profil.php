@@ -10,9 +10,13 @@ $userID = $_SESSION['user_id'];
 
 // User laden
 $stmt = $pdo->prepare("
-    SELECT *
+    SELECT
+        users.*,
+        familie.familienname AS familienname
     FROM users
-    WHERE id = :id
+    LEFT JOIN familie
+        ON users.familien_id = familie.id
+    WHERE users.id = :id
 ");
 
 $stmt->execute([

@@ -26,6 +26,9 @@ async function loadProfile() {
         document.getElementById("beitrittsdatum").value =
             result.user.beitrittsdatum || "";
 
+        document.getElementById("familienname").value =
+            result.user.familienname || "";
+
         // Kinder anzeigen
         renderKinder(result.kinder);
 

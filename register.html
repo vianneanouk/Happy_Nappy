@@ -20,40 +20,56 @@
         Erstelle dein Konto, um loszulegen
       </p>
 
-      <form id="registerForm">
+     <form id="registerForm">
 
-        <div>
-          <label>E-Mail</label>
-          <input type="email" id="email" required />
-        </div>
+  <div>
+    <label>E-Mail</label>
+    <input type="email" id="email" required />
+  </div>
 
-        <div>
-          <label>Passwort</label>
-          <input type="password" id="password" required />
-        </div>
+  <div>
+    <label>Passwort</label>
+    <input type="password" id="password" required />
+  </div>
 
-        <p id="error-message" class="error-message"></p>
+  <div>
+    <label>Familie</label>
 
-        <button class="register_button" type="submit">Registrieren</button>
+    <select name="mode" id="mode">
+      <option value="new">Neue Familie erstellen</option>
+      <option value="join">Bestehender Familie beitreten</option>
+    </select>
+  </div>
 
-      </form>
-<div>
-  <label>Familie</label>
+  <!-- Neue Familie -->
+  <div id="familienname-container">
+    <label>Familienname</label>
 
-  <select name="mode">
-    <option value="new">Neue Familie erstellen</option>
-    <option value="join">Bestehender Familie beitreten</option>
-  </select>
-</div>
+    <input
+      type="text"
+      id="familienname"
+      name="familienname"
+    >
+  </div>
 
-<div>
-  <label>Familien-ID</label>
+  <!-- Bestehende Familie -->
+  <div id="familienid-container" style="display: none;">
+    <label>Familien-ID</label>
 
-  <input
-    name="familien_id"
-    placeholder="Familien-ID"
-  >
-</div>
+    <input
+      type="number"
+      name="familien_id"
+      placeholder="Familien-ID"
+    >
+  </div>
+
+  <p id="error-message" class="error-message"></p>
+
+  <button class="register_button" type="submit">
+    Registrieren
+  </button>
+
+</form>
 
       <p class="register-text">
         Hast du bereits ein Konto?

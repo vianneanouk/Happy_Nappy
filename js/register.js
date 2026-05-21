@@ -1,3 +1,22 @@
+const modeSelect = document.getElementById("mode");
+
+const familiennameContainer = document.getElementById("familienname-container");
+const familienIDContainer = document.getElementById("familienid-container");
+
+modeSelect.addEventListener("change", () => {
+
+  if (modeSelect.value === "new") {
+
+    familiennameContainer.style.display = "block";
+    familienIDContainer.style.display = "none";
+
+  } else {
+
+    familiennameContainer.style.display = "none";
+    familienIDContainer.style.display = "block";
+  }
+});
+
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -5,8 +24,20 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const password = document.getElementById("password").value.trim();
 
   const mode = document.querySelector('select[name="mode"]').value;
-  const familien_id = document.querySelector('input[name="familien_id"]').value.trim();
+  
+  const familienIDInput =
+  document.querySelector('input[name="familien_id"]');
 
+  const familiennameInput =
+  document.querySelector('input[name="familienname"]');
+
+  const familien_id = familienIDInput
+  ? familienIDInput.value.trim()
+  : "";
+
+const familienname = familiennameInput
+  ? familiennameInput.value.trim()
+  : "";
   const errorMessage = document.getElementById("error-message");
   errorMessage.style.display = "none";
   errorMessage.textContent = "";
@@ -19,7 +50,8 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
         email,
         password,
         mode,
-        familien_id
+        familien_id,
+        familienname
       }),
     });
 

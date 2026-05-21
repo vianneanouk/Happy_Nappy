@@ -14,6 +14,7 @@ $email = trim($data['email'] ?? '');
 $password = trim($data['password'] ?? '');
 $mode = $data['mode'] ?? 'new';
 $familienID = $data['familien_id'] ?? null;
+$familienname = trim($data['familienname'] ?? '');
 
 if (!$email || !$password) {
     echo json_encode(["status" => "error", "message" => "Email und Passwort erforderlich"]);
@@ -56,9 +57,17 @@ if ($mode === "new") {
         VALUES (:familienname)
     ");
 
-    $stmt->execute([
-        ':familienname' => 'Familie ' . $userID
+    if (!$familienname) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Familienname erforderlich"
     ]);
+    exit;
+}
+
+$stmt->execute([
+    ':familienname' => $familienname
+]);
 
     $familienID = $pdo->lastInsertId();
 }
