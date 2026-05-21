@@ -47,11 +47,10 @@ async function loadProfile() {
 function getWindelgroesse(gewicht) {
   gewicht = parseFloat(gewicht);
 
-  if (Number.isNaN(gewicht)) return 0;
-  if (gewicht < 3) return 0;
-  if (gewicht <= 5) return 1;
-  if (gewicht <= 8) return 2;
-  if (gewicht <= 10) return 3;
+  if (Number.isNaN(gewicht)) return 1;
+  if (gewicht < 3) return 1;
+  if (gewicht <= 5) return 2;
+  if (gewicht <= 8) return 3;
 
   return 4;
 }
@@ -110,10 +109,6 @@ function createKindHTML(kind = {}) {
         <label><h4>Windelgrösse</h4></label>
 
         <select class="kindWindelgroesse">
-          <option value="0" ${windelgroesse == 0 ? "selected" : ""}>
-            Grösse 0
-          </option>
-
           <option value="1" ${windelgroesse == 1 ? "selected" : ""}>
             Grösse 1
           </option>
@@ -129,6 +124,7 @@ function createKindHTML(kind = {}) {
           <option value="4" ${windelgroesse == 4 ? "selected" : ""}>
             Grösse 4
           </option>
+
         </select>
       </div>
 
