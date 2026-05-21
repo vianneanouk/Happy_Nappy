@@ -8,6 +8,9 @@ async function loadProfile() {
 
     console.log(result);
 
+    console.log("is_admin:", result.user.is_admin);
+    console.log(typeof result.user.is_admin);
+
     if (result.status !== "success") {
       console.error("Profil API Fehler:", result);
       return;
@@ -18,6 +21,20 @@ async function loadProfile() {
     document.getElementById("email").value = result.user.email || "";
     document.getElementById("beitrittsdatum").value = result.user.beitrittsdatum || "";
     document.getElementById("familienname").value = result.user.familienname || "";
+    document.getElementById("familien_id").value = result.user.familien_id || "";
+
+    const familienId = result.user.familien_id;
+
+  document.getElementById("inviteLink").value =
+  familienId
+    ? `${window.location.origin}/register.html?familien_id=${familienId}`
+    : ""; 
+
+    const adminSection = document.getElementById("adminInviteSection");
+
+    if (result.user.is_admin == 1) {
+    adminSection.style.display = "block";
+    }
 
     renderKinder(result.kinder || []);
 
@@ -131,7 +148,7 @@ function createKindHTML(kind = {}) {
         type="button"
         class="removeKindBtn"
       >
-        Entfernen
+        Windelfrei!
       </button>
 
       <hr>
