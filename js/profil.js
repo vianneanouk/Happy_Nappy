@@ -8,6 +8,9 @@ async function loadProfile() {
 
     console.log(result);
 
+    console.log("is_admin:", result.user.is_admin);
+    console.log(typeof result.user.is_admin);
+
     if (result.status !== "success") {
       console.error("Profil API Fehler:", result);
       return;
