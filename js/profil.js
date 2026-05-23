@@ -25,16 +25,25 @@ async function loadProfile() {
 
     const familienId = result.user.familien_id;
 
-  document.getElementById("inviteLink").value =
-  familienId
+  const inviteLinkInput = document.getElementById("inviteLink");
+
+  if (inviteLinkInput) {
+  inviteLinkInput.value = familienId
     ? `${window.location.origin}/register.html?familien_id=${familienId}`
-    : ""; 
+    : "";
+}
 
     const adminSection = document.getElementById("adminInviteSection");
 
     if (result.user.is_admin == 1) {
     adminSection.style.display = "block";
     }
+
+    const rawDate = "2026-05-21";
+
+    const formattedDate = new Date(rawDate).toLocaleDateString("de-CH");
+
+document.getElementById("beitrittsdatum").value = formattedDate;
 
     renderKinder(result.kinder || []);
 
@@ -243,7 +252,21 @@ document.getElementById("profilForm").addEventListener("submit", async (e) => {
 
     const result = await response.json();
 
-    alert(result.message);
+   const saveMessage = document.getElementById("saveMessage");
+
+  saveMessage.textContent = result.message;
+
+if (result.status === "success") {
+  saveMessage.style.color = "#9F83CF";
+} else {
+  saveMessage.style.color = "#d9534f";
+}
+
+saveMessage.style.opacity = "1";
+
+  setTimeout(() => {
+  saveMessage.style.opacity = "0";
+  }, 10000);
 
   } catch (error) {
     console.error("Profil konnte nicht gespeichert werden", error);

@@ -248,6 +248,7 @@ button[type="submit"] {
 
 .table-wrapper {
   margin-top: 40px;
+  padding: 0 15px;
 }
 
 table {
@@ -283,6 +284,23 @@ td {
 
 tbody tr:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+#saveMessage {
+  width: 100%;
+
+  margin-top: 14px;
+
+  text-align: center;
+
+  color: #9F83CF;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
 }
 
 
