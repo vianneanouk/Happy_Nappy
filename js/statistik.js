@@ -1,3 +1,7 @@
+/* Diese Datei steuert die dynamische Darstellung der Statistik-Seite. Beim Laden der Seite werden Verbrauchsdaten der Kindern über den API-Endpunkt statistik.php vom Server geladen und in Form von Balkendiagrammen dargestellt. 
+Es gibt die Möglichkeit, zwischen einer Wochen- und Tagesansicht zu wechseln. Ebenfalls enthält die Datei Funktionen, die sicherstellen, dass auch bei fehlenden Daten für bestimmte Tage oder Wochen die Diagramme korrekt dargestellt werden.
+*/
+
 async function loadStatistikData() {
   try {
     const response = await fetch("/api/statistik.php", {

@@ -1,5 +1,7 @@
 <?php
-// login.php
+/**
+ * Diese Datei verarbeitet Login-Anfragen via POST, überprüft die Anmeldedaten gegen die Datenbank und startet eine Session für den Benutzer.
+ */
 ini_set('session.cookie_httponly', 1);
 // ini_set('session.cookie_secure', 1); // if using HTTPS
 session_start();

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Diese Datei verarbeitet gespeicherte Profiländerungen aus dem Frontend.
+ * Wenn der Vorname oder Nachname des Benutzers geändert wurde, oder wenn Kinder hinzugefügt, bearbeitet oder gelöscht wurden, werden die entsprechenden Einträge in der Datenbank aktualisiert.
+ * Alle Änderungen erfolgen innerhalb einer Datenbanktransaktion, um sicherzustellen, dass die Daten konsistent bleiben. Am Ende wird eine Erfolgsmeldung oder im Fehlerfall eine Fehlermeldung als JSON zurückgegeben.
+ */
+
 session_start();
 
 header('Content-Type: application/json');

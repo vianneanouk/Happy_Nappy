@@ -1,3 +1,10 @@
+/* Beim Laden der Profil-Seite werden die Profildaten und die Daten der Kinder über den API-Endpunkt vom Server geladen und in die Formularfelder eingefügt.
+Die Benutzer:innen können ihre Daten und die ihrer Kinder bearbeiten und speichern. Beim Speichern werden die Daten an den Server gesendet, der sie verarbeitet und in der Datenbank aktualisiert. 
+Die Datei enthält zudem die Logik zur automatischen Berechnung der Windelgrösse basierend auf dem Gewicht des Kindes, sowie die Möglichkeit, die automatische Berechnung zu überschreiben. 
+Beim Speichern werden alle Änderungen gesammelt und über die API an den Server gesendet, wo sie in der Datenbank aktualisiert werden.
+Bei Admin-Usern wird ein Einladungslink generiert, den sie an andere Personen weitergeben können, damit diese sich mit der gleichen Familien-ID registrieren können.
+*/
+
 async function loadProfile() {
   try {
     const response = await fetch("api/profil.php", {

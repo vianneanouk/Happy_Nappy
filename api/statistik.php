@@ -1,4 +1,13 @@
 <?php
+
+/** 
+ * Diese Datei stellt die Statistik-Daten für den eingeloggten Benutzer bereit. Zuerst wird geprüft, ob eine gültige Session mit einer user_id vorhanden ist. 
+ * Anschliessend werden über die Datenbank alle Kinder der zugehörigen Familie geladen, inklusive ihrer Geräte-Codes. Für jedes Kind werden die letzten Sensordaten der letzten sechs Wochen aus der Datenbank abgefragt. 
+ * Auf Basis dieser Messwerte wird serverseitig der Windelbestand aus Distanz- und RFID-Daten berechnet. 
+ * Daraus wird der Verbrauch pro Tag und pro Woche ermittelt, indem die Differenz zwischen aufeinanderfolgenden Bestandswerten ausgewertet wird. 
+ * Die Daten werden anschliessend in Tages- und Wochenaggregationen zusammengefasst und dem jeweiligen Kind zugeordnet. 
+ * Am Ende liefert die Datei eine JSON-Antwort mit allen Kindern inklusive der berechneten Statistikdaten, die im Frontend für Diagramme und Auswertungen verwendet werden können.
+ */
 session_start();
 
 header('Content-Type: application/json');

@@ -1,8 +1,6 @@
 <?php
  /***
- * load.php
- * Daten als JSON-String vom Formular sender.html (später vom MC) serverseitig empfangen und Daten in die Datenbank einfügen
- * Datenbank-Verbindung
+ * Diese Datei empfängt die Daten von den Sensoren (ESP32) und speichert sie in der Datenbank.
 **/
 
 require_once("../system/config.php"); 

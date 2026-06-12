@@ -1,5 +1,5 @@
 /* =========================
-   PAGE
+   Stile, die für die Profil-Seite verwendet werden.
 ========================= */
 
 html,
@@ -214,7 +214,8 @@ button:hover {
   color: #7d63af;
 }
 
-button[type="submit"] {
+
+button[type="submit"], #logoutBtn {
   width: 100%;
 
   margin-top: 18px;

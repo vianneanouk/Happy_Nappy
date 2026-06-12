@@ -1,3 +1,6 @@
+/* Diese Datei steuert die Bestellübersicht. Für jedes Kind wird der aktuelle Windelbestand berechnet und daraus der Bestellstatus abgeleitet.
+Allerdings dient diese Seite mehr als Simulation, da nicht wirklich eine Bestellung ausgelöst wird. */
+
 async function loadBestellungData() {
   try {
     const response = await fetch("/api/dashboard.php", {

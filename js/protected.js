@@ -1,3 +1,6 @@
+/* Diese Datei steuert die Logik der Startseite nach erfolgreicher Anmeldung. Nachdem die Authentifizierung überprüft wurde, werden die Daten der Kinder des Benutzers geladen und in einem Dashboard angezeigt.
+ Protected.js enthält ausserdem Funktionen zur Berechnung des Windelbestandes, wie lange die Windeln noch reichen werden und zeigt den Bestellstatus an.*/
+
 async function checkAuth() {
   try {
     const response = await fetch("/api/protected.php", {

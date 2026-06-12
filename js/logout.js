@@ -1,4 +1,7 @@
-// logout.js
+
+/* Diese Datei steuert den Logout im Browser. Sie hört auf den Klick auf den Logout-Button und sendet eine Anfrage an den Server, um die aktuelle Session zu beenden. 
+Nach einer erfolgreichen Antwort wird die Nutzer:in automatisch auf die Login-Seite weitergeleitet. */
+
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   // Prevent the default button behavior
   e.preventDefault();

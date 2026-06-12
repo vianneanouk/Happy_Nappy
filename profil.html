@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
+    <!-- Diese Seite zeigt das Profil des/der Nutzer:in an, also die Informationen, die bei der Registrierung eingegeben wurden. Nutzer:innen haben die Möglichkeit ihren Vor- und Nachnamen dort einzugeben. 
+     Es gibt  die Möglichkeit, neue Kinder hinzuzufügen. Danach werden die auf dieser Seite angezeigt. Wenn der/die Nutzer:in der Administrator der Familie ist, wird zusätzlich ein Einladungslink angezeigt, den er/sie an andere Personen senden kann, damit diese der Familie beitreten können.
+     Die Logik wird über die JavaScript-Dateien umgesetzt, welche die Daten laden, aktualisieren und speichern. Das Layout und Design werden durch die CSS-Dateien style.css und profil.css gestaltet. 
+     Die Tabelle über die Windelgrössen ist ein starres Element, welches als Orientierungshilfe für die Nutzer:innen dient. 
+     Die Navigation am unteren Bildschirmrand ermöglicht den Zugriff auf andere Bereiche der App wie Home, Bestellung und Statistik. -->
+     
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profil</title>
@@ -71,6 +78,10 @@
   </button> 
 
   <p id="saveMessage"></p>
+
+  <button type="button" id="logoutBtn" class="logout-btn">
+    Logout
+  </button>
 
    </form>
       
@@ -156,5 +167,6 @@
 
      <script src="js/auth.js"></script>
     <script src="js/profil.js" type="module"></script>
+    <script src="js/logout.js"></script>
   </body>
 </html>

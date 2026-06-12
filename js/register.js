@@ -1,3 +1,7 @@
+/* Diese Datei steuert die Logik der Registrierungsseite. Im Dropdown-Menü kann ausgewählt werden, ob eine neue Familie erstellt oder einer bestehenden beigetreten wird.
+Beim Absenden des Formulars werden die eingegeben Daten an den Backend-Endpunkt register.php gesendet und dort verarbeitet.
+Die Datei enthält ausserdem eine Funktion, die es möglich macht, über den Einladungslink das Familien-ID-Feld automatisch zu befüllen und den Modus auf "join" zu setzen. */
+
 const modeSelect = document.getElementById("mode");
 
 const familiennameContainer = document.getElementById("familienname-container");

@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * Diese Datei liefert Informationen über den aktuell eingeloggten Benutzer. 
+ * Sie dient als Authentifizierungs-Check für das Frontend und wird verwendet, um geschützte Seiten nur für eingeloggte User zugänglich zu machen.
+ * Rückgabe als JSON mit Benutzerinformationen wie user_id, email und vorname. Wenn kein Benutzer eingeloggt ist, wird eine Fehlermeldung zurückgegeben.
+ */
 session_start();
 
 header('Content-Type: application/json');

@@ -1,4 +1,5 @@
-// login.js
+/* Diese Datei steuert die Anmeldung der Nutzer:innen. Beim Absenden des Login-Formulars werden die eingegebenen Daten als JSON an den Server gesendet.
+Bei erfolgreicher Authentifizierung wird der/die Benutzer:in zur geschützten Startseite weitergeleitet. */
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();

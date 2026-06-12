@@ -1,5 +1,11 @@
 <?php
 
+/** 
+ * Diese Datei liefert alle Informationen, die für die Profilseite benötigt werden.
+ * Zugriff auf die user_id, laden des Benutzerprofils inkl. Familienname, ermitteln der Familien-ID des Benutzers, laden aller Kinder.
+ * Rückgabe als JSON für das Frontend.
+ */
+
 session_start();
 
 header('Content-Type: application/json');

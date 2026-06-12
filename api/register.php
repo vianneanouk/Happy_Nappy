@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Diese Datei verarbeitet die Benutzerregistrierung. 
+ * Zuerst wird geprüft, ob die Anfrage per POST erfolgt und die benötigten Daten (E-Mail, Passwort und Registrierungsmodus) im JSON-Body vorhanden sind. 
+ * Anschliessend wird kontrolliert, ob die E-Mail bereits in der Datenbank existiert. Falls dies nicht der Fall ist, wird ein neuer Benutzer mit einem sicher gehashten Passwort erstellt.
+ * Je nach Modus ("new" oder "join") wird entweder eine neue Familie erstellt oder der Benutzer einer bestehenden Familie zugeordnet. 
+ * Am Ende wird eine JSON-Antwort mit dem Status der Registrierung, der Benutzer-ID, der Familien-ID und der Admin-Status zurückgegeben. Bei Fehlern werden entsprechende Fehlermeldungen zurückgegeben.
+ * 
+ */
 session_start();
 header('Content-Type: application/json');
 require_once '../system/config.php';
