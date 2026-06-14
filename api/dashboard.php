@@ -6,7 +6,7 @@
 *- Berechnung des Verbrauchs der letzten Woche basierend auf den Messungen der letzten Woche
 *
 * Die Daten werden dann als JSON zurückgegeben und klnnen dann zur Darstellung des Dashbords genutzt werden. 
-*/
+**/
 
 
 <?php
